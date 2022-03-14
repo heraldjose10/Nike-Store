@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
 
-function App() {
+const App = () => {
+
+  const [store, setStore] = useState([])
+
+  useEffect(() => {
+    const callAPI = async () => {
+      const res = await fetch('/shop')
+      const data = await res.json()
+      setStore([...data.products])
+    }
+    callAPI()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Nike Store</h1>
+      {
+        store.map(product => (
+          <div key={product.id}>
+            <h3>{product.name}</h3>
+            <p>{product.price}</p>
+          </div>
+        ))
+      }
     </div>
-  );
+  )
 }
 
 export default App;
