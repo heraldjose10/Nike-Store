@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from backend import api
+
 
 products = [
     {'id': 1, 'name': 'Air Force 1', 'price': '8999'},
@@ -8,19 +8,19 @@ products = [
 ]
 
 
-class Product(Resource):
+class Products(Resource):
+    """methods for products resource"""
 
     def get(self, id):
+        """return a product resource"""
         for product in products:
             if product['id'] == id:
                 return product
 
 
-class ProductList(Resource):
+class ProductsList(Resource):
+    """methods for list of products"""
 
     def get(self):
+        """return list of products"""
         return products
-
-
-api.add_resource(Product, '/api/products/<int:id>', endpoint='product')
-api.add_resource(ProductList, '/api/products', endpoint='product_list')
