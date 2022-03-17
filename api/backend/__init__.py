@@ -30,4 +30,7 @@ def create_app(config_type='development'):
     from backend.resources import api
     api.init_app(app)
     
+    from backend.auth import auth as bp
+    app.register_blueprint(bp)
+
     return app
