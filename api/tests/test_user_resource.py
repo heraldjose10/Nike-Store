@@ -24,12 +24,14 @@ class UserResourceTestCase(ApiBaseTestCase):
         response = self.test_client.post(
             '/api/users')
         self.assertEqual(400, response.status_code)
-        self.assertEqual('send json body', response.json['error'])
+        self.assertEqual('username is required',
+                         response.json['message']['username'])
 
         response = self.test_client.post(
             '/api/users', headers={"Content-Type": "application/json"}, data=payload)
         self.assertEqual(409, response.status_code)
-        self.assertEqual('username already taken', response.json['error'])
+        self.assertEqual('username already taken',
+                         response.json['message']['username'])
 
         payload = json.dumps({
             'username': 'userx1',
@@ -40,4 +42,4 @@ class UserResourceTestCase(ApiBaseTestCase):
             '/api/users', headers={"Content-Type": "application/json"}, data=payload)
         self.assertEqual(409, response.status_code)
         self.assertEqual(
-            'an account already exists with this email', response.json['error'])
+            'an account already exists with this email', response.json['message']['email'])

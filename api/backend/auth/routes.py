@@ -26,10 +26,14 @@ def token():
                     }
                 }, 200
             else:
-                return {'error': 'wrong credentials'}, 401
+                return {
+                    'message': {'password': 'wrong password'}
+                }, 401
 
         else:
-            return {'error': 'user does not exist'}, 404
+            return {
+                'message': {'username': 'user does not exist for given username'}
+            }, 404
 
     else:
         return {'error': 'send json body'}, 400
