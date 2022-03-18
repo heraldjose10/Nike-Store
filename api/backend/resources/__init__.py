@@ -9,3 +9,4 @@ api.add_resource(Products, '/api/products/<int:id>', endpoint='product')
 api.add_resource(ProductsList, '/api/products', endpoint='product_list')
 
 api.add_resource(Users, '/api/users', endpoint='user')
+api.add_resource(Users, '/api/users/<string:username>', endpoint='user_get')

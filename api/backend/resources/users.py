@@ -1,10 +1,15 @@
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from backend.models import User
 from backend import db
 
 
 class Users(Resource):
     """methods for Users resource"""
+
+    method_decorators = {
+        'get': [jwt_required()]
+    }
 
     def __init__(self) -> None:
         # create a request parser for parsing
@@ -47,3 +52,20 @@ class Users(Resource):
                 'email': user.email
             }
         }, 201
+
+    def get(self, username=None):
+        """get current logged in user"""
+        user_id = get_jwt_identity()
+        user = User.query.filter_by(id=user_id).first()
+        if user.username != username:
+            return {
+                'message': {'username': 'username mismatch'}
+            }, 403
+        else:
+            return {
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email
+                }
+            }

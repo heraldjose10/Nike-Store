@@ -20,7 +20,8 @@ class TestingConfig(Config):
     """Testing configurations for Flask application"""
     DEBUG = True
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'nike-test.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
+        os.path.join(basedir, 'nike-test.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False,
     SECRET_KEY = 'testing secret'
 
