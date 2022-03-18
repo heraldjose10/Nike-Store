@@ -85,8 +85,14 @@ class UserResourceTestCase(ApiBaseTestCase):
         self.assertEqual(403, response.status_code)
         self.assertEqual('username mismatch', response.json['message']['username'])
 
+        # test for wrong token
         headers = {'Authorization': f'Bearer {access_token[:-1]}'}
         response = self.test_client.get(
             f'/api/users/{username}', headers=headers)
         self.assertEqual(422, response.status_code)
         self.assertEqual('Signature verification failed', response.json['msg'])
+
+        response = self.test_client.get(
+            f'/api/users/{username}')
+        self.assertEqual(401, response.status_code)
+        self.assertEqual('Missing Authorization Header', response.json['msg'])

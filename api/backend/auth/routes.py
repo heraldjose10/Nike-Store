@@ -1,7 +1,7 @@
 from flask import request
 from backend.auth import auth
 from backend.models import User
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 
 
 @auth.post('/token')
@@ -40,3 +40,16 @@ def token():
         return {
             'message': {'username': 'user does not exist for given username'}
         }, 404
+
+
+@auth.post('/token/refresh')
+@jwt_required(refresh=True)
+def refresh():
+    """route to refresh token"""
+    user_id = get_jwt_identity()
+    access_token = create_access_token(identity=user_id)
+    return {
+        'user': {
+            'access_token': access_token
+        }
+    }, 200
