@@ -1,7 +1,7 @@
 import unittest
 
 from backend import db, create_app
-from backend.models import User
+# from api.backend.models.users import User
 
 
 class ApiBaseTestCase(unittest.TestCase):

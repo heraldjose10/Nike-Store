@@ -1,8 +1,9 @@
 from datetime import datetime
 from backend import db, bcrypt
+from backend.models.products import Products
 
 
-class User(db.Model):
+class Users(db.Model):
     """database model for user"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, nullable=False)
@@ -30,4 +31,18 @@ class User(db.Model):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self) -> str:
-        return f'< User {self.id} {self.username} {self.email}'
+        return f'< User {self.id} {self.username} {self.email} >'
+
+
+class UserReviews(db.Model):
+    """database model for user reviews"""
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey(
+        'products.id'), nullable=False)
+    title = db.Column(db.String(256))
+    body = db.Column(db.Text)
+    rating = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self) -> str:
+        return f'< UserReview {self.id} {self.rating} {self.title} >'

@@ -1,6 +1,6 @@
 from tests import ApiBaseTestCase
 from backend import db
-from backend.models import User
+from backend.models.users import User
 
 
 class DataBaseTestCase(ApiBaseTestCase):

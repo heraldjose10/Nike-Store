@@ -1,6 +1,6 @@
 from flask import request
 from backend.auth import auth
-from backend.models import User
+from backend.models.users import Users
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 
 
@@ -16,7 +16,7 @@ def token():
     username = auth.username
     password = auth.password
 
-    user = User.query.filter_by(username=username).first()
+    user = Users.query.filter_by(username=username).first()
     if user:
         if user.check_password(password):
             # create tokens if password is correct
