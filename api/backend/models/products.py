@@ -30,7 +30,7 @@ class ProductStyles(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey(
         'products.id'), nullable=False)
     colour = db.Column(db.String(256))
-    style_name = db.Column(db.String(64), nullable=False, unique=True)
+    style_name = db.Column(db.String(64), nullable=False)
 
     def __repr__(self) -> str:
         return f'< ProductStyle {self.id} {self.style_name} >'

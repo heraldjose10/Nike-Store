@@ -27,3 +27,6 @@ __pycache__
 .vscode
 *.db
 .env
+
+# Nike In data stored as excel file 
+data

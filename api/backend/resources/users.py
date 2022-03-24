@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from backend.models.users import Users
+from backend.models.users import Users as _Users
 from backend import db
 
 
@@ -29,17 +29,17 @@ class Users(Resource):
         password = args['password']
         email = args['email']
 
-        if Users.query.filter_by(username=username).first() is not None:
+        if _Users.query.filter_by(username=username).first() is not None:
             return {
                 'message': {'username': 'username already taken'}
             }, 409
 
-        if Users.query.filter_by(email=email).first() is not None:
+        if _Users.query.filter_by(email=email).first() is not None:
             return {
                 'message': {'email': 'an account already exists with this email'}
             }, 409
 
-        user = Users(username=username, email=email)
+        user = _Users(username=username, email=email)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
@@ -56,7 +56,7 @@ class Users(Resource):
     def get(self, username=None):
         """get current logged in user"""
         user_id = get_jwt_identity()
-        user = Users.query.filter_by(id=user_id).first()
+        user = _Users.query.filter_by(id=user_id).first()
         if user.username != username:
             return {
                 'message': {'username': 'username mismatch'}
