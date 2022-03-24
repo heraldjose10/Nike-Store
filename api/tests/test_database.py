@@ -1,6 +1,7 @@
 from tests import ApiBaseTestCase
 from backend import db
 from backend.models.users import Users
+from backend.models.products import ProductImages, Products, ProductCategories
 
 
 class DataBaseTestCase(ApiBaseTestCase):
@@ -30,3 +31,25 @@ class DataBaseTestCase(ApiBaseTestCase):
         self.assertNotEqual(user1.password_hash, 'user1')
         self.assertFalse(user1.check_password('1234'))
         self.assertTrue(user1.check_password('user1'))
+
+    def test_products(self):
+        """test total number of products"""
+        total_products = Products.query.count()
+        self.assertNotEqual(0, total_products)
+
+    def test_product_categories(self):
+        """test product categories table"""
+        product_categories = ProductCategories.query.all()
+        products_category_one = product_categories[0].query.count()
+
+        self.assertEqual(12, len(product_categories))
+        self.assertNotEqual(0, products_category_one)
+
+    def test_product_images(self):
+        """test product images table"""
+        product_image = ProductImages.query.filter_by(id=1).first()
+        image_link = product_image.image_url
+        product_style = product_image.product_style.style_name
+
+        self.assertEqual(str, type(image_link))
+        self.assertEqual(str, type(product_style))
