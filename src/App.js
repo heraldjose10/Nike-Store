@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Nike Store</h1>
+      <h1 className="text-xl">Nike Store</h1>
       {
         store.map(product => (
           <div key={product.id}>
