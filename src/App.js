@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Footer from "./components/footer/footer.component";
 import NavBar from "./components/header/header.component";
 
 const App = () => {
@@ -15,8 +16,10 @@ const App = () => {
   }, [])
 
   return (
-    <div>
-      <NavBar/>
+    <div className="min-h-screen flex flex-col justify-between">
+      <NavBar />
+      <h1 className="grow">Nike Store!!</h1>
+      <Footer />
     </div>
   )
 }
