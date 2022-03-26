@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import NavBar from "./components/header/header.component";
 
 const App = () => {
 
@@ -15,15 +16,7 @@ const App = () => {
 
   return (
     <div>
-      <h1 className="text-xl">Nike Store</h1>
-      {
-        store.map(product => (
-          <div key={product.id}>
-            <h3>{product.name}</h3>
-            <p>{product.price}</p>
-          </div>
-        ))
-      }
+      <NavBar/>
     </div>
   )
 }
