@@ -7,7 +7,7 @@ import { FaRegUserCircle } from 'react-icons/fa'
 const NavBar = () => (
   <nav className="flex justify-between items-center">
     <NikeIcon className="h-16 w-16 my-0 mx-4 hover:cursor-pointer" />
-    <div className="flex items-center gap-5 mx-3 ">
+    <div className="flex items-center gap-5 mx-6 ">
       <div className="hidden font-sans mr-5 md:block">
         <ul className="flex flex-1">
           <li className="p-4 hover:cursor-pointer hover:border-b border-b-black">Men</li>

@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+
+import banners from "./data/banners";
+
+import Banner from "./components/banner/banner.component";
 import Footer from "./components/footer/footer.component";
 import NavBar from "./components/header/header.component";
 
@@ -18,7 +22,11 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <NavBar />
-      <h1 className="grow">Nike Store!!</h1>
+      <main className='grow mx-6 my-6'>
+        <Banner {...banners['main']} />
+        <Banner {...banners['featured']} />
+        <Banner {...banners['trending']} />
+      </main>
       <Footer />
     </div>
   )

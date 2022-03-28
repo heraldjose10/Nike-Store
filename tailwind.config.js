@@ -5,7 +5,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        saira: "'Saira Extra Condensed', sans-serif"
+        saira: "'Saira Extra Condensed', sans-serif",
+        passion: "'Passion One', cursive"
       }
     },
   },
