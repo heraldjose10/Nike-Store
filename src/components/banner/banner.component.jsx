@@ -1,12 +1,13 @@
 import React from "react";
 import useWindowWidth from "../../hooks/useWindowWidth";
+import CustomButton from "../custom-button/custom-button.component";
 
 const Banner = ({ heading, subtext, pretext, images, alt }) => {
 
   const windowWidth = useWindowWidth()
 
   return (
-    <div className='md:flex flex-col items-center'>
+    <div className='mb-20 md:flex flex-col items-center'>
       <img
         alt={alt}
         src={
@@ -29,7 +30,7 @@ const Banner = ({ heading, subtext, pretext, images, alt }) => {
             : ''
         }
       </div>
-      <button className="bg-[#111111] text-white px-2 py-1 my-2">SHOP</button>
+      <CustomButton buttonText={'Shop'} />
     </div>
   )
 }
