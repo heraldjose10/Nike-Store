@@ -10,9 +10,9 @@ const NavBar = () => (
     <div className="flex items-center gap-5 mx-6 ">
       <div className="hidden font-sans mr-5 md:block">
         <ul className="flex flex-1">
-          <li className="p-4 hover:cursor-pointer hover:border-b border-b-black">Men</li>
-          <li className="p-4 hover:cursor-pointer hover:border-b border-b-black">Women</li>
-          <li className="p-4 hover:cursor-pointer hover:border-b border-b-black">Kids</li>
+          <li className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black">Men</li>
+          <li className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black">Women</li>
+          <li className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black">Kids</li>
         </ul>
       </div>
       <div className="hidden h-10 bg-[#f5f5f5] rounded-full md:flex items-center hover:bg-[#e5e5e5]">
