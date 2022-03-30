@@ -6,6 +6,7 @@ const ProductCard = ({ pic, short_description, price, name, links }) => (
       src={
         pic || product_images.Shoes
       }
+      alt="product"
       className={`w-full object-cover h-[50vw] lg:h-[25vw] ${pic ? '' : 'opacity-30'}`}
     />
     <div className="p-3 text-sm font-sans">
