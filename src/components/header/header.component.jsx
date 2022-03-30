@@ -3,10 +3,13 @@ import { ReactComponent as NikeIcon } from './../../icons/nike-4-logo-svg-vector
 import { BsBag } from 'react-icons/bs'
 import { BsSearch } from 'react-icons/bs'
 import { FaRegUserCircle } from 'react-icons/fa'
+import { Link } from "react-router-dom";
 
 const NavBar = () => (
   <nav className="flex justify-between items-center">
-    <NikeIcon className="h-16 w-16 my-0 mx-4 hover:cursor-pointer" />
+    <Link to={'/'}>
+      <NikeIcon className="h-16 w-16 my-0 mx-4 hover:cursor-pointer" />
+    </Link>
     <div className="flex items-center gap-5 mx-6 ">
       <div className="hidden font-sans mr-5 md:block">
         <ul className="flex flex-1">

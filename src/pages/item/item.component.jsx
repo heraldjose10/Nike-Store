@@ -5,7 +5,6 @@ const Item = () => {
   return (
     <div>
       <h1>{productId}</h1>
-      <h1>Hlaohfoiuhg</h1>
     </div>
   )
 }
