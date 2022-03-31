@@ -1,15 +1,17 @@
+import axios from "axios";
 import { Fragment } from "react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+
 import ProductCard from "../product-card/product-card.component";
+import CategoriesScroller from "../categories-scroller/categories-scroller.component";
 
 const ProductsGrid = () => {
 
   const { categoryId } = useParams()
   const [products, setProducts] = useState([])
-  const [categories, setCategories] = useState([])
   const [totalProducts, setTotalProducts] = useState(0)
+  const [category, setCategory] = useState({})
 
   useEffect(() => {
     const getProducts = async () => {
@@ -36,57 +38,33 @@ const ProductsGrid = () => {
   }, [categoryId])
 
   useEffect(() => {
-    const getCategories = async () => {
+    const getCategory = async () => {
       try {
+        const url = `/api/categories/${categoryId}`
         const response = await axios({
           method: 'get',
-          url: '/api/categories'
+          url: url,
         })
         const data = response.data
-        setCategories(data['items'])
+        setCategory(data['item'])
       } catch (error) {
         console.log(error);
       }
     }
-    getCategories()
-  }, [])
+    if (categoryId) {
+      getCategory()
+    }
+  }, [categoryId])
 
   return (
     <Fragment>
-      <h1 className="mb-5 mx-5 text-2xl font-sans font-medium">Shop</h1>
-      <main className="flex flex-col lg:flex-row">
-        <aside className="hidden lg:flex w-[260px] flex-col items-center">
-          <div>
-            {
-              categories.length > 0
-                ? categories.map(category => (
-                  <Link
-                    to={`/shop/category/${category.id}`}
-                    className={`min-w-fit block my-3 ${String(category.id) === categoryId ? 'underline' : ''}`}
-                    key={category.id}
-                  >
-                    <div className="mx-5" >{category.name}</div>
-                  </Link>
-                ))
-                : <span>loading...</span>
-            }
-          </div>
-          <hr className="mt-6 w-[80%]" />
-        </aside>
-        <div className="flex gap-2 overflow-scroll no-scrollbar lg:hidden">
-          {
-            categories.length > 0
-              ? categories.map(category => (
-                <Link
-                  to={`/shop/category/${category.id}`}
-                  className={`min-w-fit pb-2 border-b-2 ${String(category.id) === categoryId ? 'border-b-black' : 'border-b-white'}`}
-                >
-                  <span className="mx-5" >{category.name}</span>
-                </Link>
-              ))
-              : <span>loading...</span>
-          }
-        </div>
+      <header className="p-5 text-2xl font-sans font-medium sticky top-0 z-10 bg-white">
+        {
+          `${category.name ? category.name : 'Shop'}`
+        }
+      </header>
+      <main className="flex flex-col lg:flex-row items-start">
+        <CategoriesScroller categoryId={categoryId} />
         <hr className="mb-2 lg:hidden" />
         <div className="py-3 lg:hidden">
           <span className="ml-5 text-gray-500">{`${totalProducts} Results`}</span>

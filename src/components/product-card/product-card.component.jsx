@@ -1,10 +1,10 @@
 import product_images from "../../data/product_images"
 
-const ProductCard = ({ pic, short_description, price, name, links }) => (
+const ProductCard = ({ pic, short_description, price, category, name, links }) => (
   <div className="w-[50vw-8px] lg:w-[25vw] mb-2">
     <img
       src={
-        pic || product_images.Shoes
+        pic || product_images[category]
       }
       alt="product"
       className={`w-full object-cover h-[50vw] lg:h-[25vw] ${pic ? '' : 'opacity-30'}`}

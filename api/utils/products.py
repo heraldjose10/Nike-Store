@@ -14,6 +14,7 @@ def make_products_array(products, base_url):
             'price': float(product.price),
             'short_description': product.short_description,
             'pic': images[0].image_url if images and len(images) > 0 else None,
+            'category': product.product_category.name,
             'links': {
                 'self': f'{base_url}/{product.id}'
             }

@@ -5,6 +5,7 @@ class ProductCategories(db.Model):
     """database model for product categories"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, nullable=False)
+    products = db.relationship('Products', back_populates='product_category')
 
     def __repr__(self) -> str:
         return f'< ProductCategory {self.id} {self.name} >'
@@ -20,6 +21,7 @@ class Products(db.Model):
     short_description = db.Column(db.Text)
     long_description = db.Column(db.Text)
     product_styles = db.relationship('ProductStyles', back_populates='product')
+    product_category = db.relationship('ProductCategories', back_populates='products')
 
     def __repr__(self) -> str:
         return f'< Product {self.id} {self.name} {self.price} >'
