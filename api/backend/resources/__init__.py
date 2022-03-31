@@ -1,7 +1,7 @@
 from flask_restful import Api
 from backend.resources.products import Products, ProductsList, ProductsListFromCategory
 from backend.resources.users import Users
-from backend.resources.categories import CategoriesList
+from backend.resources.categories import Categories, CategoriesList
 
 api = Api()
 
@@ -13,4 +13,5 @@ api.add_resource(ProductsListFromCategory, '/api/categories/<int:category_id>/pr
 api.add_resource(Users, '/api/users', endpoint='user')
 api.add_resource(Users, '/api/users/<string:username>', endpoint='user_get')
 
+api.add_resource(Categories, '/api/categories/<int:id>', endpoint='category')
 api.add_resource(CategoriesList, '/api/categories', endpoint='category_list')

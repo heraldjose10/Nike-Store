@@ -14,3 +14,18 @@ class CategoriesList(Resource):
             'items': [{'id': category.id, 'name': category.name} for category in categories],
             'total': ProductCategories.query.count()
         }, 200
+
+
+class Categories(Resource):
+    """methods for category resource"""
+
+    def get(self, id):
+        """return a category"""
+        category = ProductCategories.query.filter_by(id=id).first()
+
+        return {
+            'item': {
+                'id': category.id,
+                'name': category.name
+            }
+        }, 200
