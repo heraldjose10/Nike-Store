@@ -1,12 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import useWindowWidth from "../../hooks/useWindowWidth";
+
 import CustomButton from "../custom-button/custom-button.component";
 
 const Banner = ({ heading, subtext, pretext, images, alt, shop_link }) => {
 
   const windowWidth = useWindowWidth()
-  const navigate = useNavigate()
 
   return (
     <div className='mb-20 md:flex flex-col items-center'>
@@ -32,7 +31,7 @@ const Banner = ({ heading, subtext, pretext, images, alt, shop_link }) => {
             : ''
         }
       </div>
-      <CustomButton buttonLink={shop_link} buttonText={'Shop'} />
+      <CustomButton buttonLink={shop_link} buttonText={'Shop'} padding_y={2} />
     </div>
   )
 }
