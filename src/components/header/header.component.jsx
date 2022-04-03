@@ -6,7 +6,7 @@ import { FaRegUserCircle } from 'react-icons/fa'
 import { Link } from "react-router-dom";
 
 const NavBar = () => (
-  <nav className="flex justify-between items-center sticky top-0 bg-white">
+  <nav className="flex justify-between items-center sticky top-0 bg-white z-10">
     <Link to={'/'}>
       <NikeIcon className="h-16 w-16 my-0 mx-4 hover:cursor-pointer" />
     </Link>

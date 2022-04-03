@@ -1,5 +1,5 @@
 const StylesScroller = ({ styles, currentStyle }) => (
-  <div className="flex gap-1 no-scrollbar overflow-x-scroll mt-1">
+  <div className="flex gap-1 no-scrollbar overflow-x-scroll mt-1 max-w-[100vw] lg:flex-wrap">
     {
       styles.map(style => (
         <img

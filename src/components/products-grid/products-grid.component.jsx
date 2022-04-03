@@ -73,9 +73,13 @@ const ProductsGrid = () => {
           {
             products.length > 0
               ? products.map(p => (
-                <Link to={`/shop/product/${p.id}`} key={p.id}>
-                  <ProductCard {...p} />
-                </Link>
+                p.pic
+                  ? (
+                    <Link to={`/shop/product/${p.id}`} key={p.id}>
+                      <ProductCard {...p} />
+                    </Link>
+                  )
+                  : <ProductCard {...p} />
               ))
               : <p>LOADING.....</p>
           }

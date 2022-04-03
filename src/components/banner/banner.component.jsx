@@ -31,7 +31,7 @@ const Banner = ({ heading, subtext, pretext, images, alt, shop_link }) => {
             : ''
         }
       </div>
-      <CustomButton buttonLink={shop_link} buttonText={'Shop'} padding_y={2} />
+      <CustomButton buttonLink={shop_link} buttonText={'Shop'} padding_y={3} />
     </div>
   )
 }

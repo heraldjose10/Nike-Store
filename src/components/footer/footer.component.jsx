@@ -59,22 +59,22 @@ const Footer = () => {
         <div className="my-7">
           <ul className="flex gap-3 pl-6 basis-1/3">
             <li className="cursor-pointer rounded-full bg-[#7e7e7e] w-8 h-8 flex items-center justify-center hover:bg-white">
-              <a target='_blank' href="https://www.facebook.com/nike">
+              <a target='_blank' href="https://www.facebook.com/nike" rel="noreferrer">
                 <FaFacebook className="w-6 h-6 text-black" />
               </a>
             </li>
             <li className="cursor-pointer rounded-full bg-[#7e7e7e] w-8 h-8 flex items-center justify-center hover:bg-white">
-              <a target='_blank' href="https://twitter.com/Nike">
+              <a target='_blank' href="https://twitter.com/Nike" rel="noreferrer">
                 <FaTwitter className="w-6 h-6 text-black" />
               </a>
             </li>
             <li className="cursor-pointer rounded-full bg-[#7e7e7e] w-8 h-8 flex items-center justify-center hover:bg-white">
-              <a target='_blank' href="https://instagram.com/nike">
+              <a target='_blank' href="https://instagram.com/nike" rel="noreferrer">
                 <FaInstagram className="w-6 h-6 text-black" />
               </a>
             </li>
             <li className="cursor-pointer rounded-full bg-[#7e7e7e] w-8 h-8 flex items-center justify-center hover:bg-white">
-              <a target='_blank' href="https://www.youtube.com/user/nike">
+              <a target='_blank' href="https://www.youtube.com/user/nike" rel="noreferrer">
                 <FaYoutube className="w-6 h-6 text-black" />
               </a>
             </li>
