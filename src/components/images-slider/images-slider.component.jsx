@@ -24,12 +24,12 @@ const ImageSlider = ({ images }) => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
-  
+
   return (
     <Slider {...settings} arrows={true} className="max-w-[100vw] overflow-hidden relative lg:hidden">
       {
         images.map(image => (
-          <img src={image} alt="product" />
+          <img src={image} alt="product" key={image} />
         ))
       }
     </Slider>

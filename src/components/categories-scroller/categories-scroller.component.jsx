@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import { useDispatch, useSelector } from "react-redux"
+
+import { setCategories } from "../../redux/shop/shop.actions"
+import { selectCategories } from "../../redux/shop/shop.selectors"
 
 const CategoriesScroller = ({ categoryId }) => {
 
-  const [categories, setCategories] = useState([])
+  const dispatch = useDispatch()
+  const categories = useSelector(selectCategories)
 
   useEffect(() => {
     const getCategories = async () => {
@@ -14,13 +19,13 @@ const CategoriesScroller = ({ categoryId }) => {
           url: '/api/categories'
         })
         const data = response.data
-        setCategories(data['items'])
+        dispatch(setCategories(data['items']))
       } catch (error) {
         console.log(error);
       }
     }
     getCategories()
-  }, [])
+  }, [dispatch])
 
   return (
     <aside className="flex gap-2 overflow-scroll no-scrollbar max-w-full lg:sticky lg:top-[72px] lg:flex-col lg:flex lg:w-[260px] lg:gap-1">
@@ -35,7 +40,7 @@ const CategoriesScroller = ({ categoryId }) => {
               <span className="mx-5" >{category.name}</span>
             </Link>
           ))
-          : <span>loading...</span>
+          : ''
       }
     </aside>
   )

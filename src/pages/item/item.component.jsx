@@ -1,6 +1,15 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
+
+import {
+  clearCurrentProduct,
+  clearCurrentStyle,
+  setCurrentProduct,
+  setCurrentStyle
+} from "../../redux/shop/shop.actions"
+import { selectCurrentProduct, selectCurrentStyle } from "../../redux/shop/shop.selectors"
 
 import CustomButton from "../../components/custom-button/custom-button.component"
 import ImageSlider from "../../components/images-slider/images-slider.component"
@@ -9,8 +18,10 @@ import StylesScroller from "../../components/styles-scroller/styles-scroller.com
 const Item = () => {
   const { productId } = useParams()
 
-  const [product, setProduct] = useState({})
-  const [currentStyle, setCurrentStyle] = useState({})
+  const dispatch = useDispatch()
+
+  const currentProduct = useSelector(selectCurrentProduct)
+  const currentStyle = useSelector(selectCurrentStyle)
 
   useEffect(() => {
     const getProduct = async () => {
@@ -21,27 +32,36 @@ const Item = () => {
           url: url
         })
         const data = response.data
-        setProduct(data['item'])
-        if (data['item']['styles']) {
-          setCurrentStyle(data['item']['styles'][0])
-        }
+        dispatch(setCurrentProduct(data['item']))
       } catch (error) {
         console.log(error);
       }
     }
     getProduct()
-  }, [productId])
+    return () => dispatch(clearCurrentProduct())
+  }, [productId, dispatch])
+
+  useEffect(() => {
+    const setStyle = () => {
+      if (currentProduct && currentProduct['styles']) {
+        dispatch(setCurrentStyle(currentProduct['styles'][0]))
+      }
+    }
+    setStyle()
+    return () => dispatch(clearCurrentStyle())
+  }, [dispatch, currentProduct])
+
   return (
     <main className="py-3 lg:flex lg:mx-5 max-w-[1440px] self-center">
 
       {/* images grid for large devices */}
       {
-        product['styles'] && product['styles'].length > 0
+        currentStyle
           ? (
             <div className="hidden lg:grid grid-cols-2 auto-cols-max basis-2/3 flex-wrap gap-4 mx-5">
               {
-                product['styles'][0]['images'].map(image => (
-                  <img src={image} alt="product" />
+                currentStyle['images'].map(image => (
+                  <img src={image} alt="product" key={image} />
                 ))
               }
             </div>
@@ -49,27 +69,33 @@ const Item = () => {
           : ''
       }
       <div className="grow-0 basis-1/3">
-        <div className="m-5 my-6">
-          <h1 className="  text-2xl">
-            {product['name']}
-          </h1>
-          <p>{product['short_description']}</p>
-          <p className="mt-6">{`₹${product['price']}`}</p>
-          <p className="text-gray-500">incl. of taxes and duties</p>
-        </div>
+        {
+          currentProduct
+            ? (
+              <div className="m-5 my-6">
+                <h1 className="  text-2xl">
+                  {currentProduct['name']}
+                </h1>
+                <p>{currentProduct['short_description']}</p>
+                <p className="mt-6">{`₹${currentProduct['price']}`}</p>
+                <p className="text-gray-500">incl. of taxes and duties</p>
+              </div>
+            )
+            : ''
+        }
 
         {/* sliding product images */}
 
         {
-          currentStyle['images']
+          currentStyle && currentStyle['images']
             ? <ImageSlider images={currentStyle['images']} />
             : ''
         }
 
         {/* horizontal styles scrolling button */}
         {
-          product['styles'] && product['styles'].length > 0
-            ? <StylesScroller styles={product['styles']} currentStyle={currentStyle} />
+          currentProduct && currentStyle
+            ? <StylesScroller styles={currentProduct['styles']} currentStyle={currentStyle} />
             : ''
         }
         <div className="flex flex-col my-3 px-10">
@@ -77,7 +103,11 @@ const Item = () => {
           <CustomButton buttonText={'Favourite'} inverted={true} padding_y={5} />
         </div>
         <div className="mx-5 my-8 font-light">
-          <p className="leading-loose py-5">{product['long_description']}</p>
+          {
+            currentProduct
+              ? <p className="leading-loose py-5">{currentProduct['long_description']}</p>
+              : ''
+          }
           {
             currentStyle
               ? (

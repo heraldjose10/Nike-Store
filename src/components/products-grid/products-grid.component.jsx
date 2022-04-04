@@ -1,7 +1,11 @@
 import axios from "axios";
 import { Fragment } from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+
+import { setProducts, setTotalProducts, setCurrentCategory, clearProducts } from "../../redux/shop/shop.actions";
+import { selectCurrentCategory, selectProducts, selectTotalProducts } from "../../redux/shop/shop.selectors";
 
 import ProductCard from "../product-card/product-card.component";
 import CategoriesScroller from "../categories-scroller/categories-scroller.component";
@@ -9,9 +13,12 @@ import CategoriesScroller from "../categories-scroller/categories-scroller.compo
 const ProductsGrid = () => {
 
   const { categoryId } = useParams()
-  const [products, setProducts] = useState([])
-  const [totalProducts, setTotalProducts] = useState(0)
-  const [category, setCategory] = useState({})
+
+  const dispatch = useDispatch()
+
+  const category = useSelector(selectCurrentCategory)
+  const totalProducts = useSelector(selectTotalProducts)
+  const products = useSelector(selectProducts)
 
   useEffect(() => {
     const getProducts = async () => {
@@ -28,14 +35,15 @@ const ProductsGrid = () => {
           }
         })
         const data = response.data
-        setProducts(data['items'])
-        setTotalProducts(data['total'])
+        dispatch(setProducts(data['items']))
+        dispatch(setTotalProducts(data['total']))
       } catch (error) {
         console.log(error);
       }
     }
     getProducts()
-  }, [categoryId])
+    return () => dispatch(clearProducts())
+  }, [categoryId, dispatch])
 
   useEffect(() => {
     const getCategory = async () => {
@@ -46,7 +54,7 @@ const ProductsGrid = () => {
           url: url,
         })
         const data = response.data
-        setCategory(data['item'])
+        dispatch(setCurrentCategory(data['item']))
       } catch (error) {
         console.log(error);
       }
@@ -54,13 +62,13 @@ const ProductsGrid = () => {
     if (categoryId) {
       getCategory()
     }
-  }, [categoryId])
+  }, [categoryId, dispatch])
 
   return (
     <Fragment>
       <header className="p-5 text-2xl font-sans font-medium sticky top-0 z-10 bg-white">
         {
-          `${category.name ? category.name : 'Shop'}`
+          `${category ? category.name : 'Shop'}`
         }
       </header>
       <main className="flex flex-col lg:flex-row items-start">
@@ -79,7 +87,7 @@ const ProductsGrid = () => {
                       <ProductCard {...p} />
                     </Link>
                   )
-                  : <ProductCard {...p} />
+                  : <ProductCard key={p.id} {...p} />
               ))
               : <p>LOADING.....</p>
           }
