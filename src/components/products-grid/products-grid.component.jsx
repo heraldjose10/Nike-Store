@@ -4,7 +4,13 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
-import { setProducts, setTotalProducts, setCurrentCategory, clearProducts } from "../../redux/shop/shop.actions";
+import {
+  setProducts,
+  setTotalProducts,
+  setCurrentCategory,
+  clearProducts,
+  clearCurrentCategory
+} from "../../redux/shop/shop.actions";
 import { selectCurrentCategory, selectProducts, selectTotalProducts } from "../../redux/shop/shop.selectors";
 
 import ProductCard from "../product-card/product-card.component";
@@ -62,6 +68,7 @@ const ProductsGrid = () => {
     if (categoryId) {
       getCategory()
     }
+    return () => dispatch(clearCurrentCategory())
   }, [categoryId, dispatch])
 
   return (

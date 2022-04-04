@@ -41,6 +41,11 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         ...state,
         currentStyle: action.payload
       }
+    case shopActionTypes.CLEAR_CURRENT_CATEGORY:
+      return {
+        ...state,
+        currentCategory: null
+      }
     case shopActionTypes.ClEAR_CURRENT_STYLE:
       return {
         ...state,

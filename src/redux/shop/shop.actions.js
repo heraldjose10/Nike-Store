@@ -41,3 +41,7 @@ export const clearCurrentProduct = () => ({
 export const clearCurrentStyle = () => ({
   type: shopActionTypes.ClEAR_CURRENT_STYLE
 })
+
+export const clearCurrentCategory = () => ({
+  type: shopActionTypes.CLEAR_CURRENT_CATEGORY
+})
