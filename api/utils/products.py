@@ -1,5 +1,8 @@
 def make_products_array(products, base_url):
 
+    base_url_stripped = base_url.split('/')[:4]
+    base_url = ('/'.join(base_url_stripped))
+    
     products_array = []
 
     for product in products.items:
@@ -16,7 +19,7 @@ def make_products_array(products, base_url):
             'pic': images[0].image_url if images and len(images) > 0 else None,
             'category': product.product_category.name,
             'links': {
-                'self': f'{base_url}/{product.id}'
+                'self': f'{base_url}/products/{product.id}'
             }
         })
 

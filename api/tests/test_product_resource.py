@@ -38,3 +38,14 @@ class ProductResourceTestCase(ApiBaseTestCase):
         self.assertEqual(float, type(response_json['items'][0]['price']))
         self.assertNotEqual(0, response_json['total'])
         self.assertEqual(40, len(response_json['items']))
+
+    def test_products_search(self):
+        """test the search functionality of products resource"""
+        response = self.test_client.get('/api/products?query=retro')
+        response_json = response.json
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(dict, type(response_json))
+        self.assertEqual(dict, type(response_json['links']))
+        self.assertEqual(float, type(response_json['items'][0]['price']))
+        self.assertNotEqual(0, response_json['total'])

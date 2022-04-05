@@ -42,15 +42,23 @@ class ProductsList(Resource):
             'limit', type=int, help='limit must be a integer', location='args')
         self.reqparse.add_argument(
             'offset', type=int, help='offset must be a integer', location='args')
+        self.reqparse.add_argument(
+            'query', type=str, help='query must be a string', location='args')
 
     def get(self):
         """return list of products"""
         args = self.reqparse.parse_args()
         per_page = args['limit'] or 10
         current_page = args['offset'] or 1
+        query = args['query']
 
-        products = _Products.query.order_by(_Products.price.desc()).paginate(
-            page=current_page, per_page=per_page)
+        if query:
+            products = _Products.query.filter(_Products.name.like(f'%{query}%')).paginate(
+                page=current_page, per_page=per_page
+            )
+        else:
+            products = _Products.query.order_by(_Products.price.desc()).paginate(
+                page=current_page, per_page=per_page)
 
         products_array = make_products_array(products, request.base_url)
 
@@ -61,7 +69,7 @@ class ProductsList(Resource):
                 'self': f'{request.base_url}?limit={per_page}&offset={current_page}',
                 'prev': f'{request.base_url}?limit={per_page}&offset={products.prev_num}' if products.has_prev else None
             },
-            'total': _Products.query.count()
+            'total': products.query.count()
         }, 200
 
 
