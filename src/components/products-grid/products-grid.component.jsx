@@ -12,6 +12,7 @@ import {
   clearCurrentCategory
 } from "../../redux/shop/shop.actions";
 import { selectCurrentCategory, selectProducts, selectTotalProducts } from "../../redux/shop/shop.selectors";
+import useQueryParams from "../../hooks/useQueryParams";
 
 import ProductCard from "../product-card/product-card.component";
 import CategoriesScroller from "../categories-scroller/categories-scroller.component";
@@ -19,7 +20,8 @@ import CategoriesScroller from "../categories-scroller/categories-scroller.compo
 const ProductsGrid = () => {
 
   const { categoryId } = useParams()
-
+  const search = useQueryParams('search')
+  console.log(search);
   const dispatch = useDispatch()
 
   const category = useSelector(selectCurrentCategory)
@@ -29,9 +31,12 @@ const ProductsGrid = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const url = categoryId
+        let url = categoryId
           ? `/api/categories/${categoryId}/products`
           : '/api/products'
+        url = search
+          ? url + '?query=' + search
+          : url
         const response = await axios({
           method: 'get',
           url: url,
@@ -49,7 +54,7 @@ const ProductsGrid = () => {
     }
     getProducts()
     return () => dispatch(clearProducts())
-  }, [categoryId, dispatch])
+  }, [categoryId, dispatch, search])
 
   useEffect(() => {
     const getCategory = async () => {
@@ -71,11 +76,32 @@ const ProductsGrid = () => {
     return () => dispatch(clearCurrentCategory())
   }, [categoryId, dispatch])
 
+
+  let heading = null
+
+  if (search) {
+    heading = (
+      <div>
+        <p className="text-[15px]">Search results for</p>
+        <p>
+          <span>{search}</span>
+          <span className="hidden lg:inline">{`(${totalProducts})`}</span>
+        </p>
+      </div>
+    )
+  }
+  else if (category) {
+    heading = `Shop ${category.name}`
+  }
+  else {
+    heading = 'Shop'
+  }
+
   return (
     <Fragment>
       <header className="p-5 text-2xl font-sans font-medium sticky top-0 z-10 bg-white">
         {
-          `${category ? category.name : 'Shop'}`
+          heading
         }
       </header>
       <main className="flex flex-col lg:flex-row items-start">

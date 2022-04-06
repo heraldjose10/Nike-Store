@@ -1,9 +1,10 @@
 import React from "react";
 import { ReactComponent as NikeIcon } from './../../icons/nike-4-logo-svg-vector.svg'
 import { BsBag } from 'react-icons/bs'
-import { BsSearch } from 'react-icons/bs'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { Link } from "react-router-dom";
+
+import Search from "../search/search.component";
 
 const NavBar = () => (
   <nav className="flex justify-between items-center sticky top-0 bg-white z-10">
@@ -18,12 +19,8 @@ const NavBar = () => (
           <li className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black">Kids</li>
         </ul>
       </div>
-      <div className="hidden h-10 bg-[#f5f5f5] rounded-full md:flex items-center hover:bg-[#e5e5e5]">
-        <BsSearch className="h-6 w-6 mx-2 hover:cursor-pointer" />
-        <input placeholder="Search" className="bg-inherit mr-4 placeholder-stale-400 focus:outline-none hover:placeholder-slate-700" />
-      </div>
+      <Search/>
       <BsBag className="h-6 w-6 hover:cursor-pointer" />
-      <BsSearch className="h-6 w-6 hover:cursor-pointer md:hidden" />
       <FaRegUserCircle className="h-6 w-6 hover:cursor-pointer" />
     </div>
   </nav>
