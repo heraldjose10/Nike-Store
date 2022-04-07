@@ -1,10 +1,11 @@
-import {
+import React, {
   Fragment,
   useEffect,
   useState
 } from 'react'
 import axios from 'axios'
 import ReactDOM from 'react-dom'
+import { debounce } from 'lodash'
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdClose } from 'react-icons/md'
@@ -14,8 +15,9 @@ import popularSearchTerms from '../../data/search_terms'
 
 import ProductCard from '../product-card/product-card.component'
 
-const SearchModal = ({ handleClose }) => {
-
+const SearchModal = React.forwardRef((props, ref) => {
+  console.log(ref);
+  const { handleClose } = props
   const [query, setQuery] = useState('')
   const [results, setResults] = useState()
 
@@ -108,6 +110,8 @@ const SearchModal = ({ handleClose }) => {
     }
   }
 
+  const debouncedHandleKeyUp = debounce(handleKeyUp, 300)
+
   return ReactDOM.createPortal(
     <motion.div
       initial="start"
@@ -137,7 +141,8 @@ const SearchModal = ({ handleClose }) => {
             className={`h-6 w-6 mx-2 hover:cursor-pointer`}
           />
           <input
-            onKeyUp={handleKeyUp}
+            ref={ref}
+            onKeyUp={debouncedHandleKeyUp}
             placeholder="Search"
             className={'bg-inherit grow shrink w-[200px] mr-4 placeholder-stale-400 focus:outline-none hover:placeholder-slate-700 md:inline'}
           />
@@ -221,6 +226,6 @@ const SearchModal = ({ handleClose }) => {
     </motion.div>,
     document.getElementById('search-modal')
   )
-}
+})
 
 export default SearchModal

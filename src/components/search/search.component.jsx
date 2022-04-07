@@ -1,11 +1,20 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { BsSearch } from 'react-icons/bs'
 import useScrollBarWidth from '../../hooks/useScrollBarWidth';
+
 import SearchModal from '../search-modal/search-modal.component';
 
 const Search = () => {
 
   const [searchOn, setSearchOn] = useState(false)
+
+  const searchBoxRef = useRef()
+
+  useEffect(() => {
+    if (searchOn && searchBoxRef.current) {
+      searchBoxRef.current.focus()
+    }
+  }, [searchOn])
 
   const handleSearch = () => {
     setSearchOn(!searchOn)
@@ -41,7 +50,7 @@ const Search = () => {
       </div>
       {
         searchOn
-          ? <SearchModal handleClose={handleSearch} />
+          ? <SearchModal ref={searchBoxRef} handleClose={handleSearch} />
           : ''
       }
     </Fragment>

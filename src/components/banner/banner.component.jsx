@@ -1,11 +1,8 @@
 import React from "react";
-import useWindowWidth from "../../hooks/useWindowWidth";
 
 import CustomButton from "../custom-button/custom-button.component";
 
-const Banner = ({ heading, subtext, pretext, images, alt, shop_link }) => {
-
-  const windowWidth = useWindowWidth()
+const Banner = ({ heading, subtext, pretext, images, alt, shop_link, windowWidth }) => {
 
   return (
     <div className='mb-20 md:flex flex-col items-center'>
