@@ -21,7 +21,7 @@ const SearchModal = ({ handleClose }) => {
 
   const navigate = useNavigate()
 
-  useEffect(async () => {
+  useEffect(() => {
     let url = '/api/products?query=' + query
     const getResults = async () => {
       const response = await axios({
@@ -114,7 +114,7 @@ const SearchModal = ({ handleClose }) => {
       animate="end"
       exit="exit"
       variants={mainVarients}
-      className='bg-white min-h-screen lg:min-h-[400px] min-w-full absolute top-0 left-0 z-10 flex flex-col items-center'
+      className='bg-white min-h-screen overflow-auto lg:min-h-[400px] min-w-full absolute top-0 left-0 z-10 flex flex-col items-center'
     >
       {/* search icon and input box */}
       <div className='flex justify-between px-5 my-3 w-[100%] gap-4 lg:max-w-5xl'>
@@ -126,7 +126,14 @@ const SearchModal = ({ handleClose }) => {
           className='flex items-center grow bg-[#f5f5f5] rounded-full'
         >
           <BsSearch
-            onClick={handleClose}
+            onClick={
+              query.length > 2
+                ? () => {
+                  navigate('/shop?search=' + query)
+                  handleClose()
+                }
+                : handleClose
+            }
             className={`h-6 w-6 mx-2 hover:cursor-pointer`}
           />
           <input
@@ -153,17 +160,22 @@ const SearchModal = ({ handleClose }) => {
         {
           query.length > 2
             ? (
-              <section className="overflow-scroll grid grid-cols-2 auto-cols-max lg:grid-cols-3 grow gap-2 justify-between">
+              // display search results / can be refactored!!
+              <section className="overflow-auto grid grid-cols-2 auto-cols-max lg:grid-cols-6 grow gap-2 justify-between">
                 {
                   results && results.length > 0
                     ? results.map(p => (
                       p.pic
                         ? (
-                          <Link to={`/shop/product/${p.id}`} key={p.id}>
-                            <ProductCard {...p} />
+                          <Link
+                            to={`/shop/product/${p.id}`}
+                            key={p.id}
+                            onClick={handleClose}
+                          >
+                            <ProductCard width={'lg:w-[150px]'} {...p} />
                           </Link>
                         )
-                        : <ProductCard key={p.id} {...p} />
+                        : <ProductCard width={'lg:w-[150px]'} key={p.id} {...p} />
                     ))
                     : <p>LOADING.....</p>
                 }

@@ -21,7 +21,7 @@ const ProductsGrid = () => {
 
   const { categoryId } = useParams()
   const search = useQueryParams('search')
-  console.log(search);
+
   const dispatch = useDispatch()
 
   const category = useSelector(selectCurrentCategory)

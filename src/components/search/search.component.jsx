@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { BsSearch } from 'react-icons/bs'
-import { MdClose } from 'react-icons/md'
+import useScrollBarWidth from '../../hooks/useScrollBarWidth';
 import SearchModal from '../search-modal/search-modal.component';
 
 const Search = () => {
@@ -11,12 +11,16 @@ const Search = () => {
     setSearchOn(!searchOn)
   }
 
+  const root = document.getElementById('root')
+  const scrollBarWidth = useScrollBarWidth()
+
   if (searchOn) {
-    document.body.style.overflow = "hidden"
-    document.documentElement.scrollTo(0, 0)
+    document.body.style.paddingRight = `${scrollBarWidth}px`
+    root.style.overflow = "hidden"
   }
   else {
-    document.body.style.overflow = "scroll"
+    document.body.style.paddingRight = `0px`
+    root.style.overflow = "auto"
   }
 
   return (
