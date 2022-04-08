@@ -65,7 +65,7 @@ class ProductsList(Resource):
         return {
             'items': products_array,
             'links': {
-                'next': f'{request.base_url}?limit={per_page}&offset={products.next_num if products.has_next else None}',
+                'next': f'{request.base_url}?limit={per_page}&offset={products.next_num}' if products.has_next else None,
                 'self': f'{request.base_url}?limit={per_page}&offset={current_page}',
                 'prev': f'{request.base_url}?limit={per_page}&offset={products.prev_num}' if products.has_prev else None
             },

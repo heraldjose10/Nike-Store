@@ -1,17 +1,20 @@
 import axios from "axios";
-import { Fragment } from "react";
-import { useEffect } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
 import {
   setProducts,
-  setTotalProducts,
   setCurrentCategory,
   clearProducts,
   clearCurrentCategory
 } from "../../redux/shop/shop.actions";
-import { selectCurrentCategory, selectProducts, selectTotalProducts } from "../../redux/shop/shop.selectors";
+import {
+  selectNextURL,
+  selectCurrentCategory,
+  selectProductItems,
+  selectTotalProducts
+} from "../../redux/shop/shop.selectors";
 import useQueryParams from "../../hooks/useQueryParams";
 
 import ProductCard from "../product-card/product-card.component";
@@ -26,7 +29,48 @@ const ProductsGrid = () => {
 
   const category = useSelector(selectCurrentCategory)
   const totalProducts = useSelector(selectTotalProducts)
-  const products = useSelector(selectProducts)
+  const products = useSelector(selectProductItems)
+  const nextURL = useSelector(selectNextURL)
+
+  const [isLoadingProducts, setIsLoadingProducts] = useState()
+
+  const observer = useRef()
+
+  const lastProductRef = useCallback((node) => {
+    if (isLoadingProducts) return
+    if (observer.current) observer.current.disconnect()
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && nextURL) {
+        // make it DRY / react thunk?
+        const getP = async () => {
+          setIsLoadingProducts(true)
+          try {
+            let url = nextURL
+            const response = await axios({
+              method: 'get',
+              url: url,
+              params: {
+                limit: 20,
+                offset: 1
+              }
+            })
+            const data = response.data
+            dispatch(setProducts({
+              items: data['items'],
+              total: data['total'],
+              nextURL: data['links']['next']
+            }))
+            setIsLoadingProducts(false)
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        // fix by adding thunks
+        getP()
+      }
+    })
+    if (node) observer.current.observe(node)
+  }, [dispatch, nextURL, isLoadingProducts])
 
   useEffect(() => {
     const getProducts = async () => {
@@ -46,8 +90,11 @@ const ProductsGrid = () => {
           }
         })
         const data = response.data
-        dispatch(setProducts(data['items']))
-        dispatch(setTotalProducts(data['total']))
+        dispatch(setProducts({
+          items: data['items'],
+          total: data['total'],
+          nextURL: data['links']['next']
+        }))
       } catch (error) {
         console.log(error);
       }
@@ -124,6 +171,7 @@ const ProductsGrid = () => {
               ))
               : <p>LOADING.....</p>
           }
+          <div ref={lastProductRef}></div>
         </section>
       </main>
     </Fragment>

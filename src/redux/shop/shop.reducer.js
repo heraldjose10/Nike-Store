@@ -1,10 +1,13 @@
 import shopActionTypes from "./shop.types";
 
 const INITIAL_STATE = {
-  products: [],
+  products: {
+    total: 0,
+    items: [],
+    nextURL: null
+  },
   currentProduct: null,
   currentStyle: null,
-  totalProducts: 0,
   categories: [],
   currentCategory: null
 }
@@ -12,14 +15,21 @@ const INITIAL_STATE = {
 const shopReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case shopActionTypes.SET_PRODUCTS:
-      return ({
+      return {
         ...state,
-        products: [...state.products, ...action.payload]
-      })
+        products: {
+          ...action.payload,
+          items: [...state.products.items, ...action.payload.items]
+        }
+      }
     case shopActionTypes.CLEAR_PRODUCTS:
       return {
         ...state,
-        products: []
+        products: {
+          total: 0,
+          items: [],
+          nextURL: null
+        }
       }
     case shopActionTypes.SET_CATEGORIES:
       return {
@@ -56,12 +66,6 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         ...state,
         currentCategory: action.payload
       }
-    case shopActionTypes.SET_TOTAL_PRODUCTS:
-      return ({
-        ...state,
-        totalProducts: action.payload
-      })
-
     default:
       return state
   }

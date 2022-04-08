@@ -14,6 +14,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'nike.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CORS_HEADERS = 'Content-Type'
 
 
 class TestingConfig(Config):

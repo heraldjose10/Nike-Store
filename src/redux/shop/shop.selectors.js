@@ -7,14 +7,24 @@ export const selectProducts = createSelector(
   shop => shop.products
 )
 
+export const selectProductItems = createSelector(
+  [selectProducts],
+  products => products.items
+)
+
 export const selectCurrentProduct = createSelector(
   [selectShop],
   shop => shop.currentProduct
 )
 
 export const selectTotalProducts = createSelector(
-  [selectShop],
-  shop => shop.totalProducts
+  [selectProducts],
+  products => products.total
+)
+
+export const selectNextURL = createSelector(
+  [selectProducts],
+  products => products.nextURL
 )
 
 export const selectCategories = createSelector(

@@ -10,11 +10,6 @@ export const setCategories = (categories) => ({
   payload: categories
 })
 
-export const setTotalProducts = totalProducts => ({
-  type: shopActionTypes.SET_TOTAL_PRODUCTS,
-  payload: totalProducts
-})
-
 export const setCurrentProduct = currentProduct => ({
   type: shopActionTypes.SET_CURRENT_PRODUCT,
   payload: currentProduct
