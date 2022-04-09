@@ -32,7 +32,6 @@ export const selectCategories = createSelector(
   shop => shop.categories
 )
 
-
 export const selectCurrentCategory = createSelector(
   [selectShop],
   shop => shop.currentCategory
@@ -41,4 +40,19 @@ export const selectCurrentCategory = createSelector(
 export const selectCurrentStyle = createSelector(
   [selectShop],
   shop => shop.currentStyle
+)
+
+export const selectProductsIsFetching = createSelector(
+  [selectProducts],
+  products => products.isFetching
+)
+
+export const selectCurrentProductItem = createSelector(
+  [selectCurrentProduct],
+  currentProduct => currentProduct.item
+)
+
+export const selectCurrentProductIsFetching = createSelector(
+  [selectCurrentProduct],
+  currentProduct => currentProduct.isFetching
 )

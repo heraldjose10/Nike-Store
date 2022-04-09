@@ -1,19 +1,20 @@
 import axios from "axios";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
 import {
-  setProducts,
   setCurrentCategory,
   clearProducts,
-  clearCurrentCategory
+  clearCurrentCategory,
+  fetchProductsStartAsync
 } from "../../redux/shop/shop.actions";
 import {
   selectNextURL,
   selectCurrentCategory,
   selectProductItems,
-  selectTotalProducts
+  selectTotalProducts,
+  selectProductsIsFetching
 } from "../../redux/shop/shop.selectors";
 import useQueryParams from "../../hooks/useQueryParams";
 
@@ -31,8 +32,7 @@ const ProductsGrid = () => {
   const totalProducts = useSelector(selectTotalProducts)
   const products = useSelector(selectProductItems)
   const nextURL = useSelector(selectNextURL)
-
-  const [isLoadingProducts, setIsLoadingProducts] = useState()
+  const isLoadingProducts = useSelector(selectProductsIsFetching)
 
   const observer = useRef()
 
@@ -41,65 +41,21 @@ const ProductsGrid = () => {
     if (observer.current) observer.current.disconnect()
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && nextURL) {
-        // make it DRY / react thunk?
-        const getP = async () => {
-          setIsLoadingProducts(true)
-          try {
-            let url = nextURL
-            const response = await axios({
-              method: 'get',
-              url: url,
-              params: {
-                limit: 20,
-                offset: 1
-              }
-            })
-            const data = response.data
-            dispatch(setProducts({
-              items: data['items'],
-              total: data['total'],
-              nextURL: data['links']['next']
-            }))
-            setIsLoadingProducts(false)
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        // fix by adding thunks
-        getP()
+        let url = nextURL
+        dispatch(fetchProductsStartAsync(url, 20, 1))
       }
     })
     if (node) observer.current.observe(node)
   }, [dispatch, nextURL, isLoadingProducts])
 
   useEffect(() => {
-    const getProducts = async () => {
-      try {
-        let url = categoryId
-          ? `/api/categories/${categoryId}/products`
-          : '/api/products'
-        url = search
-          ? url + '?query=' + search
-          : url
-        const response = await axios({
-          method: 'get',
-          url: url,
-          params: {
-            limit: 20,
-            offset: 1
-          }
-        })
-        const data = response.data
-        dispatch(setProducts({
-          items: data['items'],
-          total: data['total'],
-          nextURL: data['links']['next']
-        }))
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getProducts()
+    let url = categoryId
+      ? `/api/categories/${categoryId}/products`
+      : '/api/products'
+    url = search
+      ? url + '?query=' + search
+      : url
+    dispatch(fetchProductsStartAsync(url, 20, 1))
     return () => dispatch(clearProducts())
   }, [categoryId, dispatch, search])
 
@@ -169,7 +125,10 @@ const ProductsGrid = () => {
                   )
                   : <ProductCard key={p.id} {...p} />
               ))
-              : <p>LOADING.....</p>
+              : <p>No Products!</p>
+          }
+          {
+            isLoadingProducts && <div>LOADING!!!!!</div>
           }
           <div ref={lastProductRef}></div>
         </section>

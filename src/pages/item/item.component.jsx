@@ -1,15 +1,18 @@
-import axios from "axios"
-import { useEffect } from "react"
+import { Fragment, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 
 import {
   clearCurrentProduct,
   clearCurrentStyle,
-  setCurrentProduct,
+  fetchCurrentProductStartAsync,
   setCurrentStyle
 } from "../../redux/shop/shop.actions"
-import { selectCurrentProduct, selectCurrentStyle } from "../../redux/shop/shop.selectors"
+import {
+  selectCurrentProductItem,
+  selectCurrentStyle,
+  selectCurrentProductIsFetching
+} from "../../redux/shop/shop.selectors"
 
 import CustomButton from "../../components/custom-button/custom-button.component"
 import ImageSlider from "../../components/images-slider/images-slider.component"
@@ -20,24 +23,13 @@ const Item = () => {
 
   const dispatch = useDispatch()
 
-  const currentProduct = useSelector(selectCurrentProduct)
+  const currentProduct = useSelector(selectCurrentProductItem)
+  const currentProductIsLoading = useSelector(selectCurrentProductIsFetching)
   const currentStyle = useSelector(selectCurrentStyle)
 
   useEffect(() => {
-    const getProduct = async () => {
-      const url = `/api/products/${productId}`
-      try {
-        const response = await axios({
-          method: 'get',
-          url: url
-        })
-        const data = response.data
-        dispatch(setCurrentProduct(data['item']))
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getProduct()
+    let url = `/api/products/${productId}`
+    dispatch(fetchCurrentProductStartAsync(url))
     return () => dispatch(clearCurrentProduct())
   }, [productId, dispatch])
 
@@ -51,10 +43,8 @@ const Item = () => {
     return () => dispatch(clearCurrentStyle())
   }, [dispatch, currentProduct])
 
-  return (
-    <main className="py-3 lg:flex lg:mx-5 max-w-[1440px] self-center">
-
-      {/* images grid for large devices */}
+  const ProductUI = (
+    <Fragment>
       {
         currentStyle
           ? (
@@ -120,6 +110,18 @@ const Item = () => {
           }
         </div>
       </div>
+    </Fragment>
+  )
+
+  return (
+    <main className="py-3 lg:flex lg:mx-5 max-w-[1440px] self-center">
+
+      {/* images grid for large devices */}
+      {
+        currentProductIsLoading
+          ? <div>Your Product is Laoding!!!!</div>
+          : ProductUI
+      }
     </main>
   )
 }

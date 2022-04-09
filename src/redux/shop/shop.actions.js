@@ -1,8 +1,19 @@
+import axios from "axios";
+
 import shopActionTypes from "./shop.types";
 
 export const setProducts = (products) => ({
   type: shopActionTypes.SET_PRODUCTS,
   payload: products
+})
+
+const fetchProductsStart = () => ({
+  type: shopActionTypes.FETCH_PRODUCTS_START
+})
+
+const fetchProductsError = (error) => ({
+  type: shopActionTypes.FETCH_PRODUCTS_ERROR,
+  payload: error
 })
 
 export const setCategories = (categories) => ({
@@ -13,6 +24,15 @@ export const setCategories = (categories) => ({
 export const setCurrentProduct = currentProduct => ({
   type: shopActionTypes.SET_CURRENT_PRODUCT,
   payload: currentProduct
+})
+
+const fetchCurrentProductStart = () => ({
+  type: shopActionTypes.FETCH_CURRENT_PRODUCT_START
+})
+
+const fetchCurrentProductError = (error) => ({
+  type: shopActionTypes.FETCH_CURRENT_PRODUCT_ERROR,
+  payload: error
 })
 
 export const setCurrentCategory = currentCategory => ({
@@ -40,3 +60,43 @@ export const clearCurrentStyle = () => ({
 export const clearCurrentCategory = () => ({
   type: shopActionTypes.CLEAR_CURRENT_CATEGORY
 })
+
+export const fetchProductsStartAsync = (url, limit, offset) => {
+  return async dispatch => {
+    dispatch(fetchProductsStart())
+    try {
+      const response = await axios({
+        method: 'get',
+        url: url,
+        params: {
+          limit: limit,
+          offset: offset
+        }
+      })
+      const data = response.data
+      dispatch(setProducts({
+        items: data['items'],
+        total: data['total'],
+        nextURL: data['links']['next']
+      }))
+    } catch (error) {
+      dispatch(fetchProductsError(error));
+    }
+  }
+}
+
+export const fetchCurrentProductStartAsync = (url) => {
+  return async dispatch => {
+    dispatch(fetchCurrentProductStart())
+    try {
+      const response = await axios({
+        method: 'get',
+        url: url
+      })
+      const data = response.data
+      dispatch(setCurrentProduct(data['item']))
+    } catch (error) {
+      dispatch(fetchCurrentProductError(error))
+    }
+  }
+}
