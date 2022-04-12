@@ -26,7 +26,7 @@ export const setCurrentProduct = currentProduct => ({
   payload: currentProduct
 })
 
-const fetchCurrentProductStart = () => ({
+export const fetchCurrentProductStart = () => ({
   type: shopActionTypes.FETCH_CURRENT_PRODUCT_START
 })
 
@@ -87,7 +87,6 @@ export const fetchProductsStartAsync = (url, limit, offset) => {
 
 export const fetchCurrentProductStartAsync = (url) => {
   return async dispatch => {
-    dispatch(fetchCurrentProductStart())
     try {
       const response = await axios({
         method: 'get',

@@ -16,7 +16,6 @@ import popularSearchTerms from '../../data/search_terms'
 import ProductCard from '../product-card/product-card.component'
 
 const SearchModal = React.forwardRef((props, ref) => {
-  console.log(ref);
   const { handleClose } = props
   const [query, setQuery] = useState('')
   const [results, setResults] = useState()
@@ -45,14 +44,16 @@ const SearchModal = React.forwardRef((props, ref) => {
     start: {
       opacity: 0,
       scale: .1,
+      rotate: -180
     },
     end: {
       opacity: 1,
       scale: 1,
+      rotate: 0,
       transition: {
         delay: .9
       }
-    },
+    }
   }
 
   const mainVarients = {
@@ -66,7 +67,12 @@ const SearchModal = React.forwardRef((props, ref) => {
       }
     },
     exit: {
-      y: '100vh'
+      y: '-100vh',
+      opacity: 0,
+      transition: {
+        delay: .3,
+        duration: .5
+      }
     }
   }
 
@@ -82,6 +88,9 @@ const SearchModal = React.forwardRef((props, ref) => {
         delay: .3,
         duration: .5
       }
+    },
+    exit: {
+      opacity: 0
     }
   }
 
@@ -97,7 +106,11 @@ const SearchModal = React.forwardRef((props, ref) => {
         duration: .2,
         delay: (i - 1) * .2 + .9
       }
-    })
+    }),
+    exit: {
+      y: 30,
+      opacity: 0
+    }
   }
 
   const handleKeyUp = (e) => {
@@ -118,14 +131,14 @@ const SearchModal = React.forwardRef((props, ref) => {
       animate="end"
       exit="exit"
       variants={mainVarients}
-      className='bg-white min-h-screen overflow-auto lg:min-h-[400px] min-w-full absolute top-0 left-0 z-10 flex flex-col items-center'
+      className='bg-white min-h-screen overflow-x-hidden overflow-y-auto lg:min-h-[400px] min-w-full absolute top-0 left-0 z-10 flex flex-col items-center'
     >
       {/* search icon and input box */}
       <div className='flex justify-between px-5 my-3 w-[100%] gap-4 lg:max-w-5xl'>
         <motion.div
           initial='start'
           animate='end'
-          exit='start'
+          exit='exit'
           variants={inputVariants}
           className='flex items-center grow bg-[#f5f5f5] rounded-full'
         >
@@ -153,6 +166,7 @@ const SearchModal = React.forwardRef((props, ref) => {
           onClick={handleClose}
           initial='start'
           animate='end'
+          exit='start'
           variants={closeVariants}
           className='h-10 rounded-full bg-[#f5f5f5] hover:bg-[#e5e5e5]  flex justify-center items-center hover:cursor-pointer'
         >
@@ -193,6 +207,7 @@ const SearchModal = React.forwardRef((props, ref) => {
                   custom={1}
                   initial='start'
                   animate='end'
+                  exit='exit'
                   variants={smallFallVariants}
                   className='text-[#757575] px-5'
                 >
@@ -211,6 +226,7 @@ const SearchModal = React.forwardRef((props, ref) => {
                           custom={2 + index}
                           initial='start'
                           animate='end'
+                          exit='exit'
                           variants={smallFallVariants}
                         >{term}
                         </motion.li>

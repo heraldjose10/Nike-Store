@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'framer-motion';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { BsSearch } from 'react-icons/bs'
 import useScrollBarWidth from '../../hooks/useScrollBarWidth';
@@ -26,10 +27,12 @@ const Search = () => {
   if (searchOn) {
     document.body.style.paddingRight = `${scrollBarWidth}px`
     root.style.overflow = "hidden"
+    root.style.maxHeight = '100vh'
   }
   else {
     document.body.style.paddingRight = `0px`
     root.style.overflow = "auto"
+    root.style.maxHeight = 'unset'
   }
 
   return (
@@ -48,11 +51,13 @@ const Search = () => {
           className={`hidden bg-inherit mr-4 placeholder-stale-400 focus:outline-none hover:placeholder-slate-700 md:inline`}
         />
       </div>
-      {
-        searchOn
-          ? <SearchModal ref={searchBoxRef} handleClose={handleSearch} />
-          : ''
-      }
+      <AnimatePresence>
+        {
+          searchOn
+            ? <SearchModal ref={searchBoxRef} handleClose={handleSearch} />
+            : ''
+        }
+      </AnimatePresence>
     </Fragment>
   )
 }

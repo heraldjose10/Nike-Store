@@ -20,6 +20,7 @@ import useQueryParams from "../../hooks/useQueryParams";
 
 import ProductCard from "../product-card/product-card.component";
 import CategoriesScroller from "../categories-scroller/categories-scroller.component";
+import Loader from "../loader.component.jsx/loader.component";
 
 const ProductsGrid = () => {
 
@@ -113,25 +114,30 @@ const ProductsGrid = () => {
         <div className="py-3 lg:hidden">
           <span className="ml-5 text-gray-500">{`${totalProducts} Results`}</span>
         </div>
-        <section className="grid grid-cols-2 auto-cols-max lg:grid-cols-3 grow gap-2 justify-between">
+        <div className="flex flex-col w-full">
+          <section
+            className={'grid grid-cols-2 auto-cols-max lg:grid-cols-3 gap-2 justify-between grow'}
+          >
+            {
+              products.length > 0
+                ? products.map(p => (
+                  p.pic
+                    ? (
+                      <Link to={`/shop/product/${p.id}`} key={p.id}>
+                        <ProductCard {...p} />
+                      </Link>
+                    )
+                    : <ProductCard key={p.id} {...p} />
+                ))
+                : !isLoadingProducts && <p>No Products!</p>
+            }
+          </section>
           {
-            products.length > 0
-              ? products.map(p => (
-                p.pic
-                  ? (
-                    <Link to={`/shop/product/${p.id}`} key={p.id}>
-                      <ProductCard {...p} />
-                    </Link>
-                  )
-                  : <ProductCard key={p.id} {...p} />
-              ))
-              : <p>No Products!</p>
+            isLoadingProducts
+              ? <Loader />
+              : <div ref={lastProductRef}></div>
           }
-          {
-            isLoadingProducts && <div>LOADING!!!!!</div>
-          }
-          <div ref={lastProductRef}></div>
-        </section>
+        </div>
       </main>
     </Fragment>
   )

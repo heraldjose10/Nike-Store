@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react"
+import { Fragment, useEffect, useLayoutEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 
@@ -6,7 +6,8 @@ import {
   clearCurrentProduct,
   clearCurrentStyle,
   fetchCurrentProductStartAsync,
-  setCurrentStyle
+  setCurrentStyle,
+  fetchCurrentProductStart
 } from "../../redux/shop/shop.actions"
 import {
   selectCurrentProductItem,
@@ -17,6 +18,7 @@ import {
 import CustomButton from "../../components/custom-button/custom-button.component"
 import ImageSlider from "../../components/images-slider/images-slider.component"
 import StylesScroller from "../../components/styles-scroller/styles-scroller.component"
+import Loader from "../../components/loader.component.jsx/loader.component"
 
 const Item = () => {
   const { productId } = useParams()
@@ -26,6 +28,10 @@ const Item = () => {
   const currentProduct = useSelector(selectCurrentProductItem)
   const currentProductIsLoading = useSelector(selectCurrentProductIsFetching)
   const currentStyle = useSelector(selectCurrentStyle)
+
+  useLayoutEffect(() => {
+    dispatch(fetchCurrentProductStart())
+  }, [dispatch])
 
   useEffect(() => {
     let url = `/api/products/${productId}`
@@ -119,7 +125,7 @@ const Item = () => {
       {/* images grid for large devices */}
       {
         currentProductIsLoading
-          ? <div>Your Product is Laoding!!!!</div>
+          ? <Loader />
           : ProductUI
       }
     </main>
