@@ -7,6 +7,7 @@ import ScrollToTop from "./components/scroll-to-top/scroll-to-top.component";
 import Home from "./pages/home/home.component";
 import Item from "./pages/item/item.component";
 import Shop from "./pages/shop/shop.component";
+import Register from "./pages/register/register.component";
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
             <Route path='category/:categoryId' element={<ProductsGrid />} />
             <Route path='product/:productId' element={<Item />} />
           </Route>
+          <Route path='/register' element={<Register />} />
         </Routes>
         <Footer />
       </ScrollToTop>

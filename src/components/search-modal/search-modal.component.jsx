@@ -14,7 +14,6 @@ import { BsSearch } from 'react-icons/bs'
 import popularSearchTerms from '../../data/search_terms'
 
 import ProductCard from '../product-card/product-card.component'
-import Loader from '../loader.component.jsx/loader.component'
 
 const SearchModal = React.forwardRef((props, ref) => {
   const { handleClose } = props
