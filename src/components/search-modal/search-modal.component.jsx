@@ -14,6 +14,7 @@ import { BsSearch } from 'react-icons/bs'
 import popularSearchTerms from '../../data/search_terms'
 
 import ProductCard from '../product-card/product-card.component'
+import Loader from '../loader.component.jsx/loader.component'
 
 const SearchModal = React.forwardRef((props, ref) => {
   const { handleClose } = props
@@ -180,7 +181,10 @@ const SearchModal = React.forwardRef((props, ref) => {
           query.length > 2
             ? (
               // display search results / can be refactored!!
-              <section className="overflow-auto grid grid-cols-2 auto-cols-max lg:grid-cols-6 grow gap-2 justify-between">
+              <motion.section
+                exit={{ opacity: 0 }}
+                className="overflow-auto grid grid-cols-2 auto-cols-max lg:grid-cols-6 grow gap-2 justify-between"
+              >
                 {
                   results && results.length > 0
                     ? results.map(p => (
@@ -196,9 +200,13 @@ const SearchModal = React.forwardRef((props, ref) => {
                         )
                         : <ProductCard width={'lg:w-[150px]'} key={p.id} {...p} />
                     ))
-                    : <p>LOADING.....</p>
+                    : (
+                      <div className='col-span-2 lg:col-span-6 flex flex-row justify-center'>
+                        <p className='text-xl'>Could not find products</p>
+                      </div>
+                    )
                 }
-              </section>
+              </motion.section>
             )
             : (
               // display popular search terms

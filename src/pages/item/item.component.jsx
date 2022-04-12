@@ -1,6 +1,8 @@
 import { Fragment, useEffect, useLayoutEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
+import { LazyLoadImage } from "react-lazy-load-image-component"
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import {
   clearCurrentProduct,
@@ -51,13 +53,14 @@ const Item = () => {
 
   const ProductUI = (
     <Fragment>
+      {/* images grid for large devices */}
       {
         currentStyle
           ? (
             <div className="hidden lg:grid grid-cols-2 auto-cols-max basis-2/3 flex-wrap gap-4 mx-5">
               {
                 currentStyle['images'].map(image => (
-                  <img src={image} alt="product" key={image} />
+                  <LazyLoadImage effect="blur" src={image} alt="product" key={image} />
                 ))
               }
             </div>
@@ -121,8 +124,6 @@ const Item = () => {
 
   return (
     <main className="py-3 lg:flex lg:mx-5 max-w-[1440px] self-center">
-
-      {/* images grid for large devices */}
       {
         currentProductIsLoading
           ? <Loader />
