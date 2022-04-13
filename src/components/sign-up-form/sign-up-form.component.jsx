@@ -1,10 +1,13 @@
-import { Fragment } from "react";
+import { motion } from "framer-motion";
 
 import CustomButton from "../custom-button/custom-button.component"
 import CustomFormInput from "../custom-form-input/custom-form-input.component"
 
-const SignUpForm = () => (
-  <Fragment>
+const SignUpForm = ({ setShowSignUp }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 200 }}
+    animate={{ opacity: 1, y: 0 }}
+  >
     <h1 className="my-6 text-2xl font-saira font-bold uppercase px-6 text-center">
       Become a Nike Member
     </h1>
@@ -19,10 +22,10 @@ const SignUpForm = () => (
         <input
           type='checkbox'
           className="min-h-6 min-w-6 border-[#e5e5e5] border-solid"
-          id='check'
+          id='check-email-update'
         />
         <label
-          for='check'
+          for='check-email-update'
           className="text-[#979797] text-xs"
         >
           Sign up for emails to get updates from Nike on products, offers and your Member benefits
@@ -49,8 +52,19 @@ const SignUpForm = () => (
         buttonText={'JOIN US'}
         customStyles={'rounded h-12 font-saira font-bold text-xl'}
       />
+      <p className="text-[#979797] text-xs text-center">
+        <span>
+          Already a Member?
+        </span>
+        <button
+          className="underline hover:cursor-pointer text-black"
+          onClick={() => setShowSignUp(false)}
+        >
+          Sign In
+        </button>
+      </p>
     </form>
-  </Fragment>
+  </motion.div>
 )
 
 export default SignUpForm
