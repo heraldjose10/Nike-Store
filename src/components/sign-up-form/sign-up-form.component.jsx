@@ -1,70 +1,155 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 import CustomButton from "../custom-button/custom-button.component"
 import CustomFormInput from "../custom-form-input/custom-form-input.component"
 
-const SignUpForm = ({ setShowSignUp }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 200 }}
-    animate={{ opacity: 1, y: 0 }}
-  >
-    <h1 className="my-6 text-2xl font-saira font-bold uppercase px-6 text-center">
-      Become a Nike Member
-    </h1>
-    <p className="text-center text-[#979797] text-[14px]">
-      Create your Nike Member profile and get first access to the very best of Nike products, inspiration and community.
-    </p>
-    <form className="gap-4 my-4 flex flex-col">
-      <CustomFormInput placeholder={'Email address'} />
-      <CustomFormInput placeholder={'Password'} />
-      <CustomFormInput placeholder={'Username'} />
-      <div className="flex flex-row gap-4 items-center">
-        <input
-          type='checkbox'
-          className="min-h-6 min-w-6 border-[#e5e5e5] border-solid"
-          id='check-email-update'
-        />
-        <label
-          for='check-email-update'
-          className="text-[#979797] text-xs"
-        >
-          Sign up for emails to get updates from Nike on products, offers and your Member benefits
-        </label>
-      </div>
-      <p className="text-[#979797] text-xs text-center mb-1">
-        <span>By creating an account, you agree to Nike's </span>
-        <a
-          rel="noreferrer"
-          target='_blank'
-          href="https://agreementservice.svs.nike.com/rest/agreement?agreementType=privacyPolicy&country=IN&language=en&mobileStatus=true&requestType=redirect&uxId=com.nike.commerce.nikedotcom.web"
-          className="underline">Privacy Policy
-        </a>
-        <span> and </span>
-        <a
-          rel="noreferrer"
-          href="https://agreementservice.svs.nike.com/rest/agreement?agreementType=termsOfUse&country=IN&language=en&mobileStatus=true&requestType=redirect&uxId=com.nike.commerce.nikedotcom.web"
-          className="underline hover:cursor-pointer">
-          Terms of Use
-        </a>
+const SignUpForm = ({ setShowSignUp }) => {
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [usernameError, setUsernameError] = useState('')
+
+  const handleEmailValidation = () => {
+    if (email.split('@').length !== 2) {
+      setEmailError('Please enter a valid email address.')
+    }
+    else if (email.split('@')[1].split('.').length < 2) {
+      setEmailError('Please enter a valid email address.')
+    }
+    else if (email.split('@')[1].split('.')[0].length === 0 || email.split('@')[1].split('.').at(-1).length === 0) {
+      setEmailError('Please enter a valid email address.')
+    }
+    else {
+      setEmailError('')
+    }
+  }
+
+  const handlePasswordValidation = () => {
+    if (password.length < 8) {
+      setPasswordError('Password does not meet minimum requirements. Password must have minimum 8 letters.')
+    }
+    else if (!(/\d/.test(password))) {
+      setPasswordError('Password does not meet minimum requirements. Password must have atleast a number.')
+    }
+    else if (!(/[a-zA-Z]/g.test(password))) {
+      setPasswordError('Password does not meet minimum requirements. Password must have atleast a alphabet.')
+    }
+    else {
+      setPasswordError('')
+    }
+  }
+
+  const handleUsernameValidation = () => {
+    if (username.length === 0) {
+      setUsernameError('Please enter a valid username.')
+    }
+    else {
+      setUsernameError('')
+    }
+  }
+
+  const handleSignUp = e => {
+    e.preventDefault()
+    handleEmailValidation()
+    handleUsernameValidation()
+    handlePasswordValidation()
+    if (email.length === 0 || password.length === 0 || username.length === 0 || emailError || passwordError) {
+      return
+    }
+    else {
+      console.table({ email, username, password })
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 200 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <h1 className="my-6 text-2xl font-saira font-bold uppercase px-6 text-center">
+        Become a Nike Member
+      </h1>
+      <p className="text-center text-[#979797] text-[14px]">
+        Create your Nike Member profile and get first access to the very best of Nike products, inspiration and community.
       </p>
-      <CustomButton
-        buttonLink={''}
-        buttonText={'JOIN US'}
-        customStyles={'rounded h-12 font-saira font-bold text-xl'}
-      />
+      
+      <form onSubmit={handleSignUp} noValidate className="gap-4 my-4 flex flex-col">
+        <CustomFormInput
+          setChange={setEmail}
+          placeholder={'Email address'}
+          inputType={'email'}
+          handleValidation={handleEmailValidation}
+          error={emailError}
+        />
+        <CustomFormInput
+          setChange={setPassword}
+          placeholder={'Password'}
+          inputType={'password'}
+          handleValidation={handlePasswordValidation}
+          error={passwordError}
+        />
+        <CustomFormInput
+          setChange={setUsername}
+          placeholder={'Username'}
+          inputType={'text'}
+          handleValidation={handleUsernameValidation}
+          error={usernameError}
+        />
+        <div className="flex flex-row gap-4 items-center">
+          <input
+            type='checkbox'
+            className="min-h-6 min-w-6 border-[#e5e5e5] border-solid"
+            id='check-email-update'
+          />
+          <label
+            htmlFor='check-email-update'
+            className="text-[#979797] text-xs"
+          >
+            Sign up for emails to get updates from Nike on products, offers and your Member benefits
+          </label>
+        </div>
+        <p className="text-[#979797] text-xs text-center mb-1">
+          <span>By creating an account, you agree to Nike's </span>
+          <a
+            rel="noreferrer"
+            target='_blank'
+            href="https://agreementservice.svs.nike.com/rest/agreement?agreementType=privacyPolicy&country=IN&language=en&mobileStatus=true&requestType=redirect&uxId=com.nike.commerce.nikedotcom.web"
+            className="underline">Privacy Policy
+          </a>
+          <span> and </span>
+          <a
+            rel="noreferrer"
+            href="https://agreementservice.svs.nike.com/rest/agreement?agreementType=termsOfUse&country=IN&language=en&mobileStatus=true&requestType=redirect&uxId=com.nike.commerce.nikedotcom.web"
+            className="underline hover:cursor-pointer">
+            Terms of Use
+          </a>
+        </p>
+        <CustomButton
+          buttonLink={''}
+          buttonText={'JOIN US'}
+          customStyles={'rounded h-12 font-saira font-bold text-xl'}
+          buttonAction={handleSignUp}
+        />
+      </form>
+
       <p className="text-[#979797] text-xs text-center">
         <span>
           Already a Member?
         </span>
         <button
           className="underline hover:cursor-pointer text-black"
-          onClick={() => setShowSignUp(false)}
+          onClick={(e) => setShowSignUp(false)}
         >
           Sign In
         </button>
       </p>
-    </form>
-  </motion.div>
-)
+    </motion.div>
+  )
+}
 
 export default SignUpForm

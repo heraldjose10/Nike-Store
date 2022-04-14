@@ -37,7 +37,11 @@ const Banner = ({ heading, subtext, pretext, images, alt, shop_link, windowWidth
             : ''
         }
       </div>
-      <CustomButton buttonLink={shop_link} buttonText={'Shop'} padding_y={3} />
+      <CustomButton
+        buttonText={'Shop'}
+        padding_y={3}
+        buttonAction={() => navigate(shop_link)}
+      />
     </div>
   )
 }
