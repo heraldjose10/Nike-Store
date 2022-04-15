@@ -1,29 +1,39 @@
 import { motion } from "framer-motion"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 import CustomButton from "../custom-button/custom-button.component"
 import CustomFormInput from "../custom-form-input/custom-form-input.component"
 
-const SignInForm = ({ setShowSignUp }) => {
+import { userSignInStartAsync } from "../../redux/user/user.actions"
+import { selectAccessToken } from "../../redux/user/user.selectors"
 
-  const [email, setEmail] = useState('')
+const SignInForm = ({ setShowSignUp, navigateAfterLogin }) => {
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const accessToken = useSelector(selectAccessToken)
+
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const [emailError, setEmailError] = useState('')
+  const [usernameError, setusernameError] = useState('')
   const [passwordError, setPasswordError] = useState('')
 
-  const handleEmailValidation = () => {
-    if (email.split('@').length !== 2) {
-      setEmailError('Please enter a valid email address.')
+  useEffect(() => {
+    if (accessToken) {
+      navigate(navigateAfterLogin)
     }
-    else if (email.split('@')[1].split('.').length < 2) {
-      setEmailError('Please enter a valid email address.')
-    }
-    else if (email.split('@')[1].split('.')[0].length === 0 || email.split('@')[1].split('.').at(-1).length === 0) {
-      setEmailError('Please enter a valid email address.')
+  }, [accessToken, navigateAfterLogin, navigate])
+
+  const handleUsernameValidation = () => {
+    if (username.length === 0) {
+      setusernameError('Please enter a username')
     }
     else {
-      setEmailError('')
+      setusernameError('')
     }
   }
 
@@ -38,13 +48,13 @@ const SignInForm = ({ setShowSignUp }) => {
 
   const handleSignIn = (e) => {
     e.preventDefault()
-    handleEmailValidation()
+    handleUsernameValidation()
     handlePasswordValidation()
-    if (email.length === 0 || password.length === 0 || emailError) {
+    if (username.length === 0 || password.length === 0) {
       return
     }
     else {
-      console.log({ email, password });
+      dispatch(userSignInStartAsync({ username, password }));
     }
   }
 
@@ -59,11 +69,11 @@ const SignInForm = ({ setShowSignUp }) => {
 
       <form onSubmit={handleSignIn} noValidate className="gap-4 my-4 flex flex-col w-full">
         <CustomFormInput
-          setChange={setEmail}
-          placeholder={'Email address'}
-          error={emailError}
-          handleValidation={handleEmailValidation}
-          inputType={'email'}
+          setChange={setUsername}
+          placeholder={'Username'}
+          error={usernameError}
+          handleValidation={handleUsernameValidation}
+          inputType={'text'}
         />
         <CustomFormInput
           setChange={setPassword}

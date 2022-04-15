@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import axios from "axios";
 
 import CustomButton from "../custom-button/custom-button.component"
 import CustomFormInput from "../custom-form-input/custom-form-input.component"
@@ -53,7 +54,7 @@ const SignUpForm = ({ setShowSignUp }) => {
     }
   }
 
-  const handleSignUp = e => {
+  const handleSignUp = async e => {
     e.preventDefault()
     handleEmailValidation()
     handleUsernameValidation()
@@ -62,7 +63,31 @@ const SignUpForm = ({ setShowSignUp }) => {
       return
     }
     else {
-      console.table({ email, username, password })
+      try {
+        const response = await axios({
+          method: 'post',
+          url: '/api/users',
+          data: {
+            username: username,
+            password: password,
+            email: email
+          }
+        })
+        console.log(response.data);
+        setShowSignUp(false)
+      } catch (error) {
+        if (error.response.status === 409) {
+          if ('email' in error.response.data['message']) {
+            setEmailError(error.response.data['message']['email'])
+            console.log(error.response.data['message']);
+          }
+          else if ('username' in error.response.data['message']) {
+            setUsernameError(error.response.data['message']['username'])
+            console.log(error.response.data['message']);
+          }
+          console.log(error);
+        }
+      }
     }
   }
 
@@ -77,7 +102,7 @@ const SignUpForm = ({ setShowSignUp }) => {
       <p className="text-center text-[#979797] text-[14px]">
         Create your Nike Member profile and get first access to the very best of Nike products, inspiration and community.
       </p>
-      
+
       <form onSubmit={handleSignUp} noValidate className="gap-4 my-4 flex flex-col">
         <CustomFormInput
           setChange={setEmail}
