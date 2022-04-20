@@ -8,6 +8,7 @@ import Home from "./pages/home/home.component";
 import Item from "./pages/item/item.component";
 import Shop from "./pages/shop/shop.component";
 import Register from "./pages/register/register.component";
+import Cart from "./pages/cart/cart.component";
 
 const App = () => {
 
@@ -23,6 +24,7 @@ const App = () => {
             <Route path='product/:productId' element={<Item />} />
           </Route>
           <Route path='/register' element={<Register />} />
+          <Route path='/cart' element={<Cart />} />
         </Routes>
         <Footer />
       </ScrollToTop>

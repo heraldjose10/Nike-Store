@@ -62,6 +62,7 @@ const SignInForm = ({ setShowSignUp, navigateAfterLogin }) => {
     <motion.div
       initial={{ opacity: 0, y: 200 }}
       animate={{ opacity: 1, y: 0 }}
+      transition={{ ease: 'easeOut', duration: .2 }}
     >
       <h1 className="my-6 text-2xl font-saira font-bold uppercase px-6 text-center">
         Your Account For Everything Nike

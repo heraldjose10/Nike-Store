@@ -95,6 +95,7 @@ const SignUpForm = ({ setShowSignUp }) => {
     <motion.div
       initial={{ opacity: 0, y: 200 }}
       animate={{ opacity: 1, y: 0 }}
+      transition={{ease: 'easeOut', duration:.2}}
     >
       <h1 className="my-6 text-2xl font-saira font-bold uppercase px-6 text-center">
         Become a Nike Member

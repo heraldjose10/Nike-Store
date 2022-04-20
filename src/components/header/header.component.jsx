@@ -6,7 +6,7 @@ import { FaRegUserCircle } from 'react-icons/fa'
 
 import Search from "../search/search.component";
 
-import { selectAccessToken, selectUser } from "../../redux/user/user.selectors";
+import { selectAccessToken } from "../../redux/user/user.selectors";
 
 const NavBar = () => {
 
@@ -37,7 +37,10 @@ const NavBar = () => {
           </ul>
         </div>
         <Search />
-        <BsBag className="h-6 w-6 hover:cursor-pointer" />
+        <BsBag
+          className="h-6 w-6 hover:cursor-pointer"
+          onClick={() => navigate('/cart')}
+        />
         <button
           className="hover:cursor-pointer"
           onClick={handleSignInButtonClick}

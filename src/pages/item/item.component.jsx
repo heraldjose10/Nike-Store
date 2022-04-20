@@ -11,6 +11,7 @@ import {
   setCurrentStyle,
   fetchCurrentProductStart
 } from "../../redux/shop/shop.actions"
+import { setCartItem } from "../../redux/cart/cart.actions";
 import {
   selectCurrentProductItem,
   selectCurrentStyle,
@@ -98,7 +99,11 @@ const Item = () => {
             : ''
         }
         <div className="flex flex-col my-3 px-10">
-          <CustomButton buttonText={'Add to Bag'} padding_y={5} />
+          <CustomButton
+            buttonAction={() => dispatch(setCartItem({ id: currentProduct.id, name: currentProduct.name, price: currentProduct.price, ...currentStyle }))}
+            buttonText={'Add to Bag'}
+            padding_y={5}
+          />
           <CustomButton buttonText={'Favourite'} inverted={true} padding_y={5} />
         </div>
         <div className="mx-5 my-8 font-light">
