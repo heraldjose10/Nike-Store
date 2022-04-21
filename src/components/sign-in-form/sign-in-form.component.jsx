@@ -109,7 +109,8 @@ const SignInForm = ({ setShowSignUp, navigateAfterLogin }) => {
             rel="noreferrer"
             target='_blank'
             href="https://agreementservice.svs.nike.com/rest/agreement?agreementType=privacyPolicy&country=IN&language=en&mobileStatus=true&requestType=redirect&uxId=com.nike.commerce.nikedotcom.web"
-            className="underline">Privacy Policy
+            className="underline">
+            Privacy Policy
           </a>
           <span> and </span>
           <a

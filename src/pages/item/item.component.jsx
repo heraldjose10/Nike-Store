@@ -100,7 +100,13 @@ const Item = () => {
         }
         <div className="flex flex-col my-3 px-10">
           <CustomButton
-            buttonAction={() => dispatch(setCartItem({ id: currentProduct.id, name: currentProduct.name, price: currentProduct.price, ...currentStyle }))}
+            buttonAction={() => dispatch(setCartItem({
+              id: currentProduct.id,
+              name: currentProduct.name,
+              price: currentProduct.price,
+              short_description: currentProduct.short_description,
+              ...currentStyle
+            }))}
             buttonText={'Add to Bag'}
             padding_y={5}
           />

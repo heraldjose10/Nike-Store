@@ -39,3 +39,8 @@ export const removeFromCart = (cartItems, item) => {
 
   return newCart
 }
+
+export const deleteFromCart = (cartItems, item) => {
+  const newCart = cartItems.filter(cartItem => (cartItem.id !== item.id || cartItem.style_name !== item.style_name))
+  return newCart
+}
