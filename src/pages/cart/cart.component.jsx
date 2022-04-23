@@ -19,30 +19,6 @@ const Cart = () => {
   const cartTotal = useSelector(selectCartTotal)
   const accessToken = useSelector(selectAccessToken)
 
-  const FavoritePrompt = (
-    <div className="w-full my-10">
-      <h2 className="text-2xl self-start">Favorites</h2>
-      <p className="flex gap-1">
-        <span>Want to view your favorites? </span>
-        <Link to='/register'>
-          <p
-            className="underline hover:cursor-pointer text-gray-500"
-          >
-            Join us
-          </p>
-        </Link>
-        <span> or </span>
-        <Link to='/register'>
-          <p
-            className="underline hover:cursor-pointer text-gray-500"
-          >
-            Sign-in
-          </p>
-        </Link>
-      </p>
-    </div>
-  )
-
   return (
     <div className="flex flex-col items-center mb-10 lg:flex-row lg:items-start w-full max-w-[1100px] mx-auto">
       <div className="my-10 flex flex-col items-center lg:hidden">
@@ -64,11 +40,12 @@ const Cart = () => {
 
           ))
         }
-        <div className="hidden lg:block w-full px-4">
-          {
-            !accessToken && FavoritePrompt
-          }
-        </div>
+
+        {
+          !cartTotal && (
+            <p className="w-full text-left px-4">There are no items in your bag.</p>
+          )
+        }
       </div>
       <div className="px-4 flex flex-col w-full lg:basis-1/3">
         <h2 className="text-2xl py-5 mt-5">Summary</h2>
@@ -85,11 +62,6 @@ const Cart = () => {
           <p className="font-bold tracking-wide">{`₹${cartTotal ? cartTotal + 200 : 0}`}</p>
         </span>
         <CustomButton buttonText='Checkout' padding_y={5} />
-        <div className=" lg:hidden">
-          {
-            !accessToken && FavoritePrompt
-          }
-        </div>
       </div>
     </div>
   )

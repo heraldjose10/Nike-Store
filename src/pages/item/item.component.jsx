@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useLayoutEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { LazyLoadImage } from "react-lazy-load-image-component"
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
@@ -17,6 +17,7 @@ import {
   selectCurrentStyle,
   selectCurrentProductIsFetching
 } from "../../redux/shop/shop.selectors"
+import { selectAccessToken } from "../../redux/user/user.selectors";
 
 import CustomButton from "../../components/custom-button/custom-button.component"
 import ImageSlider from "../../components/images-slider/images-slider.component"
@@ -27,10 +28,12 @@ const Item = () => {
   const { productId } = useParams()
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const currentProduct = useSelector(selectCurrentProductItem)
   const currentProductIsLoading = useSelector(selectCurrentProductIsFetching)
   const currentStyle = useSelector(selectCurrentStyle)
+  const accessToken = useSelector(selectAccessToken)
 
   useLayoutEffect(() => {
     dispatch(fetchCurrentProductStart())
@@ -51,6 +54,21 @@ const Item = () => {
     setStyle()
     return () => dispatch(clearCurrentStyle())
   }, [dispatch, currentProduct])
+
+  const handleAddToCart = () => {
+    if (accessToken) {
+      dispatch(setCartItem({
+        id: currentProduct.id,
+        name: currentProduct.name,
+        price: currentProduct.price,
+        short_description: currentProduct.short_description,
+        ...currentStyle
+      }))
+    }
+    else {
+      navigate('/register')
+    }
+  }
 
   const ProductUI = (
     <Fragment>
@@ -100,13 +118,7 @@ const Item = () => {
         }
         <div className="flex flex-col my-3 px-10">
           <CustomButton
-            buttonAction={() => dispatch(setCartItem({
-              id: currentProduct.id,
-              name: currentProduct.name,
-              price: currentProduct.price,
-              short_description: currentProduct.short_description,
-              ...currentStyle
-            }))}
+            buttonAction={handleAddToCart}
             buttonText={'Add to Bag'}
             padding_y={5}
           />

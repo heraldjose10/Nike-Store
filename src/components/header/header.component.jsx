@@ -23,6 +23,15 @@ const NavBar = () => {
     // show user profile and logout if user is signed in
   }
 
+  const handleCartButtonClick = () => {
+    if (!accessToken) {
+      navigate('/register', { state: { from: location } })
+    }
+    else {
+      navigate('/cart')
+    }
+  }
+
   return (
     <nav className="flex justify-between items-center sticky top-0 bg-white z-10">
       <Link to={'/'}>
@@ -39,7 +48,7 @@ const NavBar = () => {
         <Search />
         <BsBag
           className="h-6 w-6 hover:cursor-pointer"
-          onClick={() => navigate('/cart')}
+          onClick={handleCartButtonClick}
         />
         <button
           className="hover:cursor-pointer"
