@@ -1,6 +1,6 @@
+from sqlalchemy.orm import backref
 from datetime import datetime
 from backend import db, bcrypt
-from backend.models.products import Products
 
 
 class Users(db.Model):
@@ -32,6 +32,27 @@ class Users(db.Model):
 
     def __repr__(self) -> str:
         return f'< User {self.id} {self.username} {self.email} >'
+
+
+class CartItems(db.Model):
+    """model for storing relation between users and style items"""
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id'),
+        primary_key=True
+    )
+    product_style_id = db.Column(
+        db.Integer,
+        db.ForeignKey('product_styles.id'),
+        primary_key=True
+    )
+    item_count = db.Column(db.Integer)
+
+    users = db.relationship('Users', backref=backref('product_styles', lazy='dynamic'))
+    product_styles = db.relationship('ProductStyles', backref=backref('users', lazy='dynamic'))
+
+    def __repr__(self) -> str:
+        return f'< CartItem {self.user_id} {self.product_style_id} count: {self.item_count} >'
 
 
 class UserReviews(db.Model):

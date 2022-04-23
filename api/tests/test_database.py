@@ -1,12 +1,12 @@
 from tests import ApiBaseTestCase
 from backend import db
-from backend.models.users import Users
-from backend.models.products import ProductImages, Products, ProductCategories
+from backend.models.users import CartItems, Users
+from backend.models.products import ProductImages, ProductStyles, Products, ProductCategories
 
 
 class DataBaseTestCase(ApiBaseTestCase):
     """testcases to test database"""
-
+    
     def test_register_user(self):
         """create two user and test adding to db"""
         user1 = Users(username='userone', email='userone@mail.com')
@@ -44,6 +44,39 @@ class DataBaseTestCase(ApiBaseTestCase):
 
         self.assertEqual(12, len(product_categories))
         self.assertNotEqual(0, products_category_one)
+    
+    def test_add_to_cart(self):
+        """test add to cart functionality"""
+        user1 = Users(username='userone', email='userone@mail.com')
+        user1.set_password('userone_password')
+        user2 = Users(username='usertwo', email='usertwo@mail.com')
+        user2.set_password('usertwo_password')
+
+        db.session.add(user1)
+        db.session.add(user2)
+
+        style1 = ProductStyles.query.filter_by(id=14).first()
+        style2 = ProductStyles.query.filter_by(id=18).first()
+        style3 = ProductStyles.query.filter_by(id=19).first()
+        
+        CartItems(item_count=4, users = user1, product_styles = style1)
+        CartItems(item_count=1, users = user1, product_styles = style2)
+        CartItems(item_count=6, users = user2, product_styles = style3)
+
+        self.assertEqual(2,user1.product_styles.count())
+        self.assertEqual(6, user2.product_styles[0].item_count)
+
+        # update item count
+        user1.product_styles.filter_by(product_style_id = 14).first().item_count = 18
+        self.assertEqual(18, CartItems.query.filter_by(product_style_id = 14).first().item_count)
+
+        all_cart = CartItems.query.all()
+        self.assertEqual(3, len(all_cart))
+
+        # delete a cart item
+        user1.product_styles.filter_by(product_style_id = 14).delete()
+        all_cart = CartItems.query.all()
+        self.assertEqual(2, len(all_cart))
 
     def test_product_images(self):
         """test product images table"""
