@@ -1,6 +1,7 @@
 from flask import request
 from backend.auth import auth
 from backend.models.users import Users
+from datetime import timedelta
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 
 
@@ -20,7 +21,7 @@ def token():
     if user:
         if user.check_password(password):
             # create tokens if password is correct
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=user.id, expires_delta=timedelta(hours=1))
             refresh_token = create_refresh_token(identity=user.id)
             return {
                 'user': {

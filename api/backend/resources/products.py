@@ -15,6 +15,7 @@ class Products(Resource):
 
         for style in product.product_styles:
             product_styles_array.append({
+                'id': style.id,
                 'colour': style.colour,
                 'style_name': style.style_name,
                 'images': [image.image_url for image in style.images]

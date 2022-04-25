@@ -51,6 +51,17 @@ class CartItems(db.Model):
     users = db.relationship('Users', backref=backref('product_styles', lazy='dynamic'))
     product_styles = db.relationship('ProductStyles', backref=backref('users', lazy='dynamic'))
 
+    def get_item_details(self):
+        return {
+            'item_count':self.item_count,
+            'style_id':self.product_style_id,
+            'name': self.product_styles.product.name,
+            'price':float(self.product_styles.product.price),
+            'colour':self.product_styles.colour,
+            'image':self.product_styles.images[0].image_url if self.product_styles.images and len(self.product_styles.images)>0 else None,
+            'short_description':self.product_styles.product.short_description
+        }
+
     def __repr__(self) -> str:
         return f'< CartItem {self.user_id} {self.product_style_id} count: {self.item_count} >'
 
