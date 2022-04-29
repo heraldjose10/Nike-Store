@@ -6,3 +6,8 @@ export const selectAccessToken = createSelector(
   [selectUser],
   user => user.access_token
 )
+
+export const selectRefreshToken = createSelector(
+  [selectUser],
+  user => user.refresh_token
+)

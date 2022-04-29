@@ -52,3 +52,20 @@ export const userSignInStartAsync = ({ username, password }) => {
     }
   }
 }
+
+export const userRefreshStartAsync = (refresh_token) => {
+  return async dispatch => {
+    dispatch(userRefreshStart())
+    try {
+      const response = await axios({
+        method: 'post',
+        url: '/api/token/refresh',
+        headers: { Authorization: `Bearer ${refresh_token}` }
+      })
+      console.log(response.data);
+      dispatch(setAccessToken(response.data['user']['access_token']))
+    } catch (error) {
+      dispatch(userRefreshError(error));
+    }
+  }
+}

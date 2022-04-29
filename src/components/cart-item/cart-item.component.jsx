@@ -1,14 +1,18 @@
 import { useNavigate } from "react-router-dom"
 import { RiDeleteBinLine, RiHeartLine } from "react-icons/ri"
 import { useDispatch } from "react-redux"
-import { deleteFromCart } from "../../redux/cart/cart.actions"
+import { deleteFromCartAsync } from "../../redux/cart/cart.actions"
 
-const CartItem = (item) => {
+const CartItem = ({ item, accessToken, refreshToken }) => {
 
   const { id, name, short_description, price, count, images, colour } = item
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  const handleDeleteFromCart = () => {
+    dispatch(deleteFromCartAsync(accessToken, '/api/cartitems', item, refreshToken))
+  }
 
   return (
     <div className="flex px-4 gap-4 my-6 w-full">
@@ -32,7 +36,7 @@ const CartItem = (item) => {
         <p className="text-gray-500">{`Quantity ${count}`}</p>
         <p className="flex gap-3 my-2">
           <RiDeleteBinLine
-            onClick={() => dispatch(deleteFromCart(item))}
+            onClick={handleDeleteFromCart}
             className="w-6 h-6 hover:cursor-pointer hover:text-gray-500"
           />
           <RiHeartLine

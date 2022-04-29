@@ -7,7 +7,7 @@ import {
   selectCartTotal,
   selectTotalCartItems
 } from "../../redux/cart/cart.selectors"
-import { selectAccessToken } from "../../redux/user/user.selectors"
+import { selectAccessToken, selectRefreshToken } from "../../redux/user/user.selectors"
 
 import CartItem from "../../components/cart-item/cart-item.component"
 import CustomButton from "../../components/custom-button/custom-button.component"
@@ -18,6 +18,7 @@ const Cart = () => {
   const cartItems = useSelector(selectCartItems)
   const cartTotal = useSelector(selectCartTotal)
   const accessToken = useSelector(selectAccessToken)
+  const refreshToken = useSelector(selectRefreshToken)
 
   return (
     <div className="flex flex-col items-center mb-10 lg:flex-row lg:items-start w-full max-w-[1100px] mx-auto">
@@ -34,7 +35,11 @@ const Cart = () => {
         {
           cartItems.map((item, index) => (
             <Fragment key={index}>
-              <CartItem {...item} />
+              <CartItem
+                item={{ ...item }}
+                accessToken={accessToken}
+                refreshToken={refreshToken}
+              />
               <div className="w-[90%] border-t border-[#e5e5e5] h-[1px]"></div>
             </Fragment>
 

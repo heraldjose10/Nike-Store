@@ -11,13 +11,13 @@ import {
   setCurrentStyle,
   fetchCurrentProductStart
 } from "../../redux/shop/shop.actions"
-import { setCartItem } from "../../redux/cart/cart.actions";
+import { setCartItemStartAsync } from "../../redux/cart/cart.actions";
 import {
   selectCurrentProductItem,
   selectCurrentStyle,
   selectCurrentProductIsFetching
 } from "../../redux/shop/shop.selectors"
-import { selectAccessToken } from "../../redux/user/user.selectors";
+import { selectAccessToken, selectRefreshToken } from "../../redux/user/user.selectors";
 
 import CustomButton from "../../components/custom-button/custom-button.component"
 import ImageSlider from "../../components/images-slider/images-slider.component"
@@ -34,6 +34,7 @@ const Item = () => {
   const currentProductIsLoading = useSelector(selectCurrentProductIsFetching)
   const currentStyle = useSelector(selectCurrentStyle)
   const accessToken = useSelector(selectAccessToken)
+  const refreshToken = useSelector(selectRefreshToken)
 
   useLayoutEffect(() => {
     dispatch(fetchCurrentProductStart())
@@ -57,13 +58,18 @@ const Item = () => {
 
   const handleAddToCart = () => {
     if (accessToken) {
-      dispatch(setCartItem({
-        id: currentProduct.id,
-        name: currentProduct.name,
-        price: currentProduct.price,
-        short_description: currentProduct.short_description,
-        ...currentStyle
-      }))
+      dispatch(setCartItemStartAsync(
+        accessToken,
+        '/api/cartitems',
+        {
+          id: currentProduct.id,
+          name: currentProduct.name,
+          price: currentProduct.price,
+          short_description: currentProduct.short_description,
+          ...currentStyle
+        },
+        refreshToken
+      ))
     }
     else {
       navigate('/register')
