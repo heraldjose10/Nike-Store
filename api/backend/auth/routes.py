@@ -48,7 +48,7 @@ def token():
 def refresh():
     """route to refresh token"""
     user_id = get_jwt_identity()
-    access_token = create_access_token(identity=user_id)
+    access_token = create_access_token(identity=user_id, expires_delta=timedelta(hours=1))
     return {
         'user': {
             'access_token': access_token

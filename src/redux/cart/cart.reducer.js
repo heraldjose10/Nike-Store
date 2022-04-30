@@ -48,11 +48,6 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         items: addToCart(state.items, action.payload),
         isLoading: false
       }
-    case cartActionTypes.REMOVE_CART_ITEM:
-      return {
-        ...state,
-        items: removeFromCart(state.items, action.payload)
-      }
     case cartActionTypes.DELETE_FROM_CART:
       return {
         ...state,
@@ -64,6 +59,11 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         ...state,
         items: action.payload,
         isLoading: false
+      }
+    case cartActionTypes.EMPTY_CART:
+      return {
+        ...state,
+        items: []
       }
     default:
       return state

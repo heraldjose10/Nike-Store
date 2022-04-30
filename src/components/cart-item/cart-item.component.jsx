@@ -1,6 +1,8 @@
+import { motion } from 'framer-motion'
 import { useNavigate } from "react-router-dom"
 import { RiDeleteBinLine, RiHeartLine } from "react-icons/ri"
 import { useDispatch } from "react-redux"
+
 import { deleteFromCartAsync } from "../../redux/cart/cart.actions"
 
 const CartItem = ({ item, accessToken, refreshToken }) => {
@@ -15,7 +17,12 @@ const CartItem = ({ item, accessToken, refreshToken }) => {
   }
 
   return (
-    <div className="flex px-4 gap-4 my-6 w-full">
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ ease: 'easeOut', duration: .2 }}
+      className="flex px-4 gap-4 my-6 w-full"
+    >
       <div className="shrink-0">
         <img
           className="w-20 h-20 object-cover hover:cursor-pointer md:w-[150px] md:h-[150px]"
@@ -47,7 +54,7 @@ const CartItem = ({ item, accessToken, refreshToken }) => {
       <div className="max-w-[100px] shrink-0 grow">
         <p className="text-right" >{`₹ ${price * count}`}</p>
       </div>
-    </div>
+    </motion.div>
   )
 }
 

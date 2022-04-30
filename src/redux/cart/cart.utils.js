@@ -23,24 +23,9 @@ export const addToCart = (cartItems, item) => {
   }
 }
 
-export const removeFromCart = (cartItems, item) => {
-
-  const newCart = cartItems.map(cartItem => {
-    if (cartItem.id === item.id && cartItem.style_name === item.style_name) {
-      return {
-        ...cartItem,
-        count: cartItem.count -= 1
-      }
-    }
-    else {
-      return cartItem
-    }
-  })
-
-  return newCart
-}
-
 export const deleteFromCart = (cartItems, item) => {
-  const newCart = cartItems.filter(cartItem => (cartItem.id !== item.id || cartItem.style_name !== item.style_name))
+  const newCart = cartItems.filter(cartItem =>
+    (cartItem.id !== item.id || (cartItem.style_name !== item.style_name))
+  )
   return newCart
 }

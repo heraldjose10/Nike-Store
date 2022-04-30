@@ -16,11 +16,6 @@ const setCartItemError = (error) => ({
   payload: error
 })
 
-export const removeCartItem = (item) => ({
-  type: cartActionTypes.REMOVE_CART_ITEM,
-  payload: item
-})
-
 export const deleteFromCart = (item) => ({
   type: cartActionTypes.DELETE_FROM_CART,
   payload: item
@@ -49,6 +44,10 @@ const setCart = items => ({
   payload: items
 })
 
+export const emptyCart = () => ({
+  type: cartActionTypes.EMPTY_CART
+})
+
 export const setCartItemStartAsync = (token, url, item, refresh_token) => {
   return async (dispatch) => {
     dispatch(setCartItemStart())
@@ -64,6 +63,8 @@ export const setCartItemStartAsync = (token, url, item, refresh_token) => {
       if (error.response.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
           dispatch(userRefreshStartAsync(refresh_token))
+          // request after setting refreshed token!
+          // setCartItemStartAsync(token, url, item, refresh_token)
         }
         else {
           dispatch(setCartItemError(error))
@@ -88,6 +89,7 @@ export const deleteFromCartAsync = (token, url, item, refresh_token) => {
       if (error.response.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
           dispatch(userRefreshStartAsync(refresh_token))
+          // dispatch(deleteFromCartAsync((token, url, item, refresh_token)))
         }
         else {
           dispatch(deleteFromCartError(error))
@@ -111,6 +113,7 @@ export const getCartStartAsync = (token, refresh_token, url) => {
       if (error.response.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
           dispatch(userRefreshStartAsync(refresh_token))
+          // dispatch(getCartStartAsync(token, refresh_token, url))
         }
         else {
           dispatch(getCartError())
