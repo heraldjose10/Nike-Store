@@ -20,9 +20,17 @@ const userSignInStart = () => ({
   type: userActionTypes.USER_SIGN_IN_START
 })
 
+const userValidateStart = () => ({
+  type: userActionTypes.USER_VALIDATE_START
+})
+
 const setAccessToken = access_token => ({
   type: userActionTypes.SET_ACCESS_TOKEN,
   payload: access_token
+})
+
+const userValidateSuccess = () => ({
+  type: userActionTypes.USER_VALIDATE_SUCCESS
 })
 
 const userRefreshError = error => ({
@@ -65,10 +73,29 @@ export const userRefreshStartAsync = (refresh_token) => {
         url: '/api/token/refresh',
         headers: { Authorization: `Bearer ${refresh_token}` }
       })
-      console.log(response.data);
       dispatch(setAccessToken(response.data['user']['access_token']))
     } catch (error) {
       dispatch(userRefreshError(error));
+    }
+  }
+}
+
+export const validateUserToken = (token, refreshToken, url) => {
+  return async dispatch => {
+    dispatch(userValidateStart())
+    try {
+      await axios({
+        method: 'get',
+        url: url,
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      dispatch(userValidateSuccess())
+    } catch (error) {
+      if (error.response.status === 401) {
+        if (error.response.data['msg'] === 'Token has expired') {
+          dispatch(userRefreshStartAsync(refreshToken))
+        }
+      };
     }
   }
 }

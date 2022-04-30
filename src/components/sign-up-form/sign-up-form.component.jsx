@@ -73,7 +73,6 @@ const SignUpForm = ({ setShowSignUp }) => {
             email: email
           }
         })
-        console.log(response.data);
         setShowSignUp(false)
       } catch (error) {
         if (error.response.status === 409) {

@@ -11,3 +11,8 @@ export const selectRefreshToken = createSelector(
   [selectUser],
   user => user.refresh_token
 )
+
+export const selectUserName = createSelector(
+  [selectUser],
+  user => user.username
+)

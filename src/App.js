@@ -1,4 +1,13 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
+
+import {
+  selectAccessToken,
+  selectRefreshToken,
+  selectUserName
+} from "./redux/user/user.selectors";
+import { validateUserToken } from "./redux/user/user.actions";
 
 import Footer from "./components/footer/footer.component";
 import NavBar from "./components/header/header.component";
@@ -11,6 +20,20 @@ import Register from "./pages/register/register.component";
 import Cart from "./pages/cart/cart.component";
 
 const App = () => {
+
+  const dispatch = useDispatch()
+
+  const accessToken = useSelector(selectAccessToken)
+  const refreshToken = useSelector(selectRefreshToken)
+  const username = useSelector(selectUserName)
+
+  useEffect(() => {
+    dispatch(validateUserToken(
+      accessToken,
+      refreshToken,
+      `/api/users/${username}`
+    ))
+  })
 
   return (
     <div className="min-h-screen flex flex-col justify-between">

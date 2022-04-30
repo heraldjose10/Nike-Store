@@ -98,7 +98,6 @@ export const deleteFromCartAsync = (token, url, item, refresh_token) => {
 }
 
 export const getCartStartAsync = (token, refresh_token, url) => {
-  console.log(token);
   return async dispatch => {
     dispatch(getCartStart())
     try {
@@ -107,7 +106,6 @@ export const getCartStartAsync = (token, refresh_token, url) => {
         url: url,
         headers: { Authorization: `Bearer ${token}` }
       })
-      console.log(response.data['items']);
       dispatch(setCart(response.data['items']))
     } catch (error) {
       if (error.response.status === 401) {

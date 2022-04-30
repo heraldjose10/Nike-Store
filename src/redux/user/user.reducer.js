@@ -21,9 +21,15 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case userActionTypes.CLEAR_USER:
       return INITIAL_STATE
     case userActionTypes.USER_REFRESH_START:
+    case userActionTypes.USER_VALIDATE_START:
       return {
         ...state,
         fetching_auth_token: true
+      }
+    case userActionTypes.USER_VALIDATE_SUCCESS:
+      return {
+        ...state,
+        fetching_auth_token: false
       }
     case userActionTypes.USER_SIGN_IN_START:
       return {
