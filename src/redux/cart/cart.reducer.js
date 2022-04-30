@@ -9,20 +9,44 @@ const INITIAL_STATE = {
 
 const cartReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case cartActionTypes.SET_CART_ITEM_START, cartActionTypes.SET_CART_ITEM_START:
+    case cartActionTypes.SET_CART_ITEM_START:
       return {
         ...state,
         isLoading: true
       }
-    case cartActionTypes.SET_CART_ITEM_ERROR, cartActionTypes.DELETE_FROM_CART_ERROR:
+    case cartActionTypes.DELETE_FROM_CART_START:
       return {
         ...state,
+        isLoading: true
+      }
+    case cartActionTypes.GET_CART_START:
+      return {
+        ...state,
+        isLoading: true
+      }
+    case cartActionTypes.SET_CART_ITEM_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
+      }
+    case cartActionTypes.DELETE_FROM_CART_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
+      }
+    case cartActionTypes.GET_CART_ERROR:
+      return {
+        ...state,
+        isLoading: false,
         error: action.payload
       }
     case cartActionTypes.SET_CART_ITEM:
       return {
         ...state,
-        items: addToCart(state.items, action.payload)
+        items: addToCart(state.items, action.payload),
+        isLoading: false
       }
     case cartActionTypes.REMOVE_CART_ITEM:
       return {
@@ -32,7 +56,14 @@ const cartReducer = (state = INITIAL_STATE, action) => {
     case cartActionTypes.DELETE_FROM_CART:
       return {
         ...state,
-        items: deleteFromCart(state.items, action.payload)
+        items: deleteFromCart(state.items, action.payload),
+        isLoading: false
+      }
+    case cartActionTypes.SET_CART:
+      return {
+        ...state,
+        items: action.payload,
+        isLoading: false
       }
     default:
       return state

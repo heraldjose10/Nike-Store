@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux"
-import { Fragment } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { Fragment, useEffect } from "react"
 import { Link } from "react-router-dom"
 
 import {
@@ -8,17 +8,25 @@ import {
   selectTotalCartItems
 } from "../../redux/cart/cart.selectors"
 import { selectAccessToken, selectRefreshToken } from "../../redux/user/user.selectors"
+import { getCartStartAsync } from "../../redux/cart/cart.actions"
 
 import CartItem from "../../components/cart-item/cart-item.component"
 import CustomButton from "../../components/custom-button/custom-button.component"
 
 const Cart = () => {
 
+  const dispatch = useDispatch()
+
   const totalCartItems = useSelector(selectTotalCartItems)
   const cartItems = useSelector(selectCartItems)
   const cartTotal = useSelector(selectCartTotal)
   const accessToken = useSelector(selectAccessToken)
   const refreshToken = useSelector(selectRefreshToken)
+
+  useEffect(() => {
+    dispatch(getCartStartAsync(accessToken, refreshToken, '/api/cartitems'))
+  }, [])
+  
 
   return (
     <div className="flex flex-col items-center mb-10 lg:flex-row lg:items-start w-full max-w-[1100px] mx-auto">

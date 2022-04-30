@@ -35,6 +35,20 @@ const deleteFromCartError = (error) => ({
   payload: error
 })
 
+const getCartStart = () => ({
+  type: cartActionTypes.GET_CART_START
+})
+
+const getCartError = error => ({
+  type: cartActionTypes.GET_CART_ERROR,
+  payload: error
+})
+
+const setCart = items => ({
+  type: cartActionTypes.SET_CART,
+  payload: items
+})
+
 export const setCartItemStartAsync = (token, url, item, refresh_token) => {
   return async (dispatch) => {
     dispatch(setCartItemStart())
@@ -77,6 +91,31 @@ export const deleteFromCartAsync = (token, url, item, refresh_token) => {
         }
         else {
           dispatch(deleteFromCartError(error))
+        }
+      };
+    }
+  }
+}
+
+export const getCartStartAsync = (token, refresh_token, url) => {
+  console.log(token);
+  return async dispatch => {
+    dispatch(getCartStart())
+    try {
+      const response = await axios({
+        method: 'get',
+        url: url,
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      console.log(response.data['items']);
+      dispatch(setCart(response.data['items']))
+    } catch (error) {
+      if (error.response.status === 401) {
+        if (error.response.data['msg'] === 'Token has expired') {
+          dispatch(userRefreshStartAsync(refresh_token))
+        }
+        else {
+          dispatch(getCartError())
         }
       };
     }

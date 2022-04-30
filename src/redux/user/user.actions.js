@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getCartStartAsync } from "../cart/cart.actions";
 
 import userActionTypes from "./user.types";
 
@@ -46,7 +47,9 @@ export const userSignInStartAsync = ({ username, password }) => {
           password: password
         }
       })
-      dispatch(setUser(response.data['user']));
+      const user = response.data['user']
+      dispatch(setUser(user));
+      dispatch(getCartStartAsync(user['access_token'], user['refresh_token'], '/api/cartitems'))
     } catch (error) {
       dispatch(userSignInError(error));
     }

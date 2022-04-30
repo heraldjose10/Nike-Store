@@ -53,12 +53,12 @@ class CartItems(db.Model):
 
     def get_item_details(self):
         return {
-            'item_count':self.item_count,
-            'style_id':self.product_style_id,
+            'count':self.item_count,
+            'id':self.product_style_id,
             'name': self.product_styles.product.name,
             'price':float(self.product_styles.product.price),
             'colour':self.product_styles.colour,
-            'image':self.product_styles.images[0].image_url if self.product_styles.images and len(self.product_styles.images)>0 else None,
+            'images':[self.product_styles.images[0].image_url] if self.product_styles.images and len(self.product_styles.images)>0 else [],
             'short_description':self.product_styles.product.short_description
         }
 
