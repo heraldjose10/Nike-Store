@@ -26,7 +26,7 @@ const CartItem = ({ item, accessToken, refreshToken }) => {
       <div className="shrink-0">
         <img
           className="w-20 h-20 object-cover hover:cursor-pointer md:w-[150px] md:h-[150px]"
-          onClick={() => navigate(`/shop/product/${id}`)}
+          onClick={() => navigate(`/shop/product/${id}`)} //fix this! dont navigate with this id
           alt='product thumbnail'
           src={images[0]}
         />

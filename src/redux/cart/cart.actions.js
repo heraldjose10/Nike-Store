@@ -52,7 +52,7 @@ export const setCartItemStartAsync = (token, url, item, refresh_token) => {
   return async (dispatch) => {
     dispatch(setCartItemStart())
     try {
-      const response = await axios({
+      await axios({
         method: 'post',
         url: url,
         data: { style_id: item['id'], item_count: 1 },
@@ -62,9 +62,7 @@ export const setCartItemStartAsync = (token, url, item, refresh_token) => {
     } catch (error) {
       if (error.response.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
-          dispatch(userRefreshStartAsync(refresh_token))
-          // request after setting refreshed token!
-          // setCartItemStartAsync(token, url, item, refresh_token)
+          dispatch(userRefreshStartAsync(refresh_token, setCartItemStartAsync, [url, item, refresh_token]))
         }
         else {
           dispatch(setCartItemError(error))
@@ -78,7 +76,7 @@ export const deleteFromCartAsync = (token, url, item, refresh_token) => {
   return async dispatch => {
     dispatch(deleteFromCartStart())
     try {
-      const response = await axios({
+      await axios({
         method: 'delete',
         url: url,
         data: { style_id: item['id'], item_count: 1 },
@@ -88,8 +86,7 @@ export const deleteFromCartAsync = (token, url, item, refresh_token) => {
     } catch (error) {
       if (error.response.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
-          dispatch(userRefreshStartAsync(refresh_token))
-          // dispatch(deleteFromCartAsync((token, url, item, refresh_token)))
+          dispatch(userRefreshStartAsync(refresh_token, deleteFromCartAsync, [url, item, refresh_token]))
         }
         else {
           dispatch(deleteFromCartError(error))
@@ -112,8 +109,7 @@ export const getCartStartAsync = (token, refresh_token, url) => {
     } catch (error) {
       if (error.response.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
-          dispatch(userRefreshStartAsync(refresh_token))
-          // dispatch(getCartStartAsync(token, refresh_token, url))
+          dispatch(userRefreshStartAsync(refresh_token, getCartStartAsync, [refresh_token, url]))
         }
         else {
           dispatch(getCartError())

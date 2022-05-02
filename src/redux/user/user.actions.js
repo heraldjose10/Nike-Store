@@ -64,7 +64,7 @@ export const userSignInStartAsync = ({ username, password }) => {
   }
 }
 
-export const userRefreshStartAsync = (refresh_token) => {
+export const userRefreshStartAsync = (refresh_token, callback, callbackParameters) => {
   return async dispatch => {
     dispatch(userRefreshStart())
     try {
@@ -73,7 +73,9 @@ export const userRefreshStartAsync = (refresh_token) => {
         url: '/api/token/refresh',
         headers: { Authorization: `Bearer ${refresh_token}` }
       })
-      dispatch(setAccessToken(response.data['user']['access_token']))
+      const accessToken = response.data['user']['access_token']
+      dispatch(setAccessToken(accessToken))
+      dispatch(callback(accessToken, ...callbackParameters))
     } catch (error) {
       dispatch(userRefreshError(error));
     }

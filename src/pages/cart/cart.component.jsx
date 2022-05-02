@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { Fragment, useLayoutEffect } from "react"
-import { Link } from "react-router-dom"
+import { Fragment, useEffect, useLayoutEffect } from "react"
 
 import {
   selectCartItems,
@@ -26,7 +25,7 @@ const Cart = () => {
   useLayoutEffect(() => {
     dispatch(emptyCart())
     dispatch(getCartStartAsync(accessToken, refreshToken, '/api/cartitems'))
-  }, [])
+  }, [refreshToken, accessToken, dispatch])
 
 
   return (

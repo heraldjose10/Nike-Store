@@ -1,5 +1,5 @@
 import cartActionTypes from "./cart.types";
-import { addToCart, deleteFromCart, removeFromCart } from "./cart.utils";
+import { addToCart, deleteFromCart } from "./cart.utils";
 
 const INITIAL_STATE = {
   items: [],

@@ -64,7 +64,7 @@ const SignUpForm = ({ setShowSignUp }) => {
     }
     else {
       try {
-        const response = await axios({
+        await axios({
           method: 'post',
           url: '/api/users',
           data: {
