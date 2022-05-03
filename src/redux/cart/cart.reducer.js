@@ -20,6 +20,7 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         isLoading: true
       }
     case cartActionTypes.GET_CART_START:
+    case cartActionTypes.UPDATE_CART_START:
       return {
         ...state,
         isLoading: true
@@ -37,12 +38,14 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         error: action.payload
       }
     case cartActionTypes.GET_CART_ERROR:
+    case cartActionTypes.UPDATE_CART_ERROR:
       return {
         ...state,
         isLoading: false,
         error: action.payload
       }
     case cartActionTypes.SET_CART_ITEM:
+    case cartActionTypes.UPDATE_CART:
       return {
         ...state,
         items: addToCart(state.items, action.payload),

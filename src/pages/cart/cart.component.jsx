@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { Fragment, useEffect, useLayoutEffect } from "react"
+import { Fragment, useLayoutEffect } from "react"
 
 import {
   selectCartItems,

@@ -48,21 +48,34 @@ export const emptyCart = () => ({
   type: cartActionTypes.EMPTY_CART
 })
 
-export const setCartItemStartAsync = (token, url, item, refresh_token) => {
+const updateCartItem = (item) => ({
+  type: cartActionTypes.UPDATE_CART,
+  payload: item
+})
+
+const updateCartItemStart = () => ({
+  type: cartActionTypes.UPDATE_CART_START
+})
+
+const updateCartItemError = () => ({
+  type: cartActionTypes.UPDATE_CART_ERROR
+})
+
+export const setCartItemStartAsync = (token, url, item, count, refresh_token) => {
   return async (dispatch) => {
     dispatch(setCartItemStart())
     try {
       await axios({
         method: 'post',
         url: url,
-        data: { style_id: item['id'], item_count: 1 },
+        data: { style_id: item['id'], item_count: count },
         headers: { Authorization: `Bearer ${token}` }
       })
       dispatch(setCartItem(item))
     } catch (error) {
       if (error.response.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
-          dispatch(userRefreshStartAsync(refresh_token, setCartItemStartAsync, [url, item, refresh_token]))
+          dispatch(userRefreshStartAsync(refresh_token, setCartItemStartAsync, [url, item, count, refresh_token]))
         }
         else {
           dispatch(setCartItemError(error))
@@ -79,7 +92,7 @@ export const deleteFromCartAsync = (token, url, item, refresh_token) => {
       await axios({
         method: 'delete',
         url: url,
-        data: { style_id: item['id'], item_count: 1 },
+        data: { style_id: item['id'] },
         headers: { Authorization: `Bearer ${token}` }
       })
       dispatch(deleteFromCart(item))
@@ -112,7 +125,31 @@ export const getCartStartAsync = (token, refresh_token, url) => {
           dispatch(userRefreshStartAsync(refresh_token, getCartStartAsync, [refresh_token, url]))
         }
         else {
-          dispatch(getCartError())
+          dispatch(getCartError(error))
+        }
+      };
+    }
+  }
+}
+
+export const updateCartItemAsync = (token, refresh_token, item, count, url) => {
+  return async dispatch => {
+    dispatch(updateCartItemStart())
+    try {
+      await axios({
+        method: 'patch',
+        url: url,
+        data: { style_id: item['id'], item_count: count },
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      updateCartItem(item)
+    } catch (error) {
+      if (error.response.status === 401) {
+        if (error.response.data['msg'] === 'Token has expired') {
+          dispatch(userRefreshStartAsync(refresh_token, updateCartItemAsync, [refresh_token, item, count, url]))
+        }
+        else {
+          dispatch(updateCartItemError(error))
         }
       };
     }

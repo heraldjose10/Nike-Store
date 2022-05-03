@@ -11,13 +11,14 @@ import {
   setCurrentStyle,
   fetchCurrentProductStart
 } from "../../redux/shop/shop.actions"
-import { setCartItemStartAsync } from "../../redux/cart/cart.actions";
+import { setCartItemStartAsync, updateCartItemAsync } from "../../redux/cart/cart.actions";
 import {
   selectCurrentProductItem,
   selectCurrentStyle,
   selectCurrentProductIsFetching
 } from "../../redux/shop/shop.selectors"
 import { selectAccessToken, selectRefreshToken } from "../../redux/user/user.selectors";
+import { selectCartItems } from "../../redux/cart/cart.selectors";
 
 import CustomButton from "../../components/custom-button/custom-button.component"
 import ImageSlider from "../../components/images-slider/images-slider.component"
@@ -35,6 +36,7 @@ const Item = () => {
   const currentStyle = useSelector(selectCurrentStyle)
   const accessToken = useSelector(selectAccessToken)
   const refreshToken = useSelector(selectRefreshToken)
+  const cartItems = useSelector(selectCartItems)
 
   useLayoutEffect(() => {
     dispatch(fetchCurrentProductStart())
@@ -57,19 +59,32 @@ const Item = () => {
   }, [dispatch, currentProduct])
 
   const handleAddToCart = () => {
+    const item = {
+      id: currentProduct.id,
+      name: currentProduct.name,
+      price: currentProduct.price,
+      short_description: currentProduct.short_description,
+      ...currentStyle
+    }
+    const cartItem = cartItems.filter(i => i.id === item.id)[0]
+    const count = cartItem ? cartItem['count'] += 1 : 1
+    console.log(count);
     if (accessToken) {
-      dispatch(setCartItemStartAsync(
-        accessToken,
-        '/api/cartitems',
-        {
-          id: currentProduct.id,
-          name: currentProduct.name,
-          price: currentProduct.price,
-          short_description: currentProduct.short_description,
-          ...currentStyle
-        },
-        refreshToken
-      ))
+      count === 1
+        ? dispatch(setCartItemStartAsync(
+          accessToken,
+          '/api/cartitems',
+          item,
+          count,
+          refreshToken
+        ))
+        : dispatch(updateCartItemAsync(
+          accessToken,
+          refreshToken,
+          item,
+          count,
+          '/api/cartitems',
+        ))
     }
     else {
       navigate('/register')

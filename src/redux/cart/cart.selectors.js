@@ -16,3 +16,8 @@ export const selectCartTotal = createSelector(
   [selectCart],
   cart => cart.items.reduce((prev, curr) => prev + (curr.count * curr.price), 0)
 )
+
+export const selectItem = item => createSelector(
+  [selectCart],
+  cart => cart.items.filter(i => i.id === item.id && i.name === item.name)
+)
