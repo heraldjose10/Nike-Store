@@ -3,19 +3,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+import PrevArrow from "../prev-arrow/prev-arrow.component";
+import NextArrow from "../next-arrow/next-arrow.component";
+
 const ImageSlider = ({ images }) => {
-
-  const PrevArrow = ({ onClick }) => (
-    <div className="font-bold text-3xl absolute top-[50%] left-6 bg-white rounded-full h-10 w-10 text-center opacity-30 hover:opacity-100 hover:cursor-pointer z-[5]" onClick={onClick}>
-      &lt;
-    </div>
-  )
-
-  const NextArrow = ({ onClick }) => (
-    <div className="font-bold text-3xl absolute top-[50%] right-6 bg-white rounded-full h-10 w-10 text-center opacity-30 hover:opacity-100 hover:cursor-pointer" onClick={onClick}>
-      &gt;
-    </div>
-  )
 
   const settings = {
     dots: false,

@@ -18,6 +18,7 @@ import Item from "./pages/item/item.component";
 import Shop from "./pages/shop/shop.component";
 import Register from "./pages/register/register.component";
 import Cart from "./pages/cart/cart.component";
+import Profile from "./pages/profile/profile.component";
 
 const App = () => {
 
@@ -48,6 +49,7 @@ const App = () => {
           </Route>
           <Route path='/register' element={<Register />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
         <Footer />
       </ScrollToTop>

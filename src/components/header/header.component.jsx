@@ -20,7 +20,9 @@ const NavBar = () => {
     if (!accessToken) {
       navigate('/register', { state: { from: location } })
     }
-    // show user profile and logout if user is signed in
+    else {
+      navigate('/profile')
+    }
   }
 
   const handleCartButtonClick = () => {

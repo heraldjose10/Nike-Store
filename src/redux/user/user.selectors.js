@@ -16,3 +16,8 @@ export const selectUserName = createSelector(
   [selectUser],
   user => user.username
 )
+
+export const selectEmail = createSelector(
+  [selectUser],
+  user => user.email
+)
