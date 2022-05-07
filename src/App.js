@@ -29,11 +29,13 @@ const App = () => {
   const username = useSelector(selectUserName)
 
   useEffect(() => {
-    dispatch(validateUserToken(
-      accessToken,
-      refreshToken,
-      `/api/users/${username}`
-    ))
+    if (accessToken) {
+      dispatch(validateUserToken(
+        accessToken,
+        refreshToken,
+        `/api/users/${username}`
+      ))
+    }
   })
 
   return (

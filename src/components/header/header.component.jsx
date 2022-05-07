@@ -42,9 +42,27 @@ const NavBar = () => {
       <div className="flex items-center gap-5 mx-6 ">
         <div className="hidden font-sans mr-5 md:block">
           <ul className="flex flex-1">
-            <li className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black">Men</li>
-            <li className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black">Women</li>
-            <li className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black">Kids</li>
+            <Link to={'/shop?gender=men'}>
+              <li
+                className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black"
+              >
+                Men
+              </li>
+            </Link>
+            <Link to={'/shop?gender=women'}>
+              <li
+                className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black"
+              >
+                Women
+              </li>
+            </Link>
+            <Link to={'/shop?gender=kids'}>
+              <li
+                className="p-4 hover:cursor-pointer border-b-2 border-b-white hover:border-b-black"
+              >
+                Kids
+              </li>
+            </Link>
           </ul>
         </div>
         <Search />
