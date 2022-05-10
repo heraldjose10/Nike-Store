@@ -21,7 +21,7 @@ import useQueryParams from "../../hooks/useQueryParams";
 import useScrollBarWidth from "../../hooks/useScrollBarWidth";
 
 import ProductCard from "../product-card/product-card.component";
-import CategoriesScroller from "../categories-scroller/categories-scroller.component";
+import CategoriesAndFilters from "../categories-scroller/categories-scroller.component";
 import Loader from "../loader.component.jsx/loader.component";
 import FiltersModal from "../filters-modal/filters-modal.component";
 import { AnimatePresence } from "framer-motion";
@@ -31,6 +31,8 @@ const ProductsGrid = () => {
   const { categoryId } = useParams()
   const search = useQueryParams('search')
   const gender = useQueryParams('gender')
+
+  const [filter, setFilter] = useState(gender)
 
   const dispatch = useDispatch()
 
@@ -58,18 +60,22 @@ const ProductsGrid = () => {
   }, [dispatch, nextURL, isLoadingProducts])
 
   useEffect(() => {
+    setFilter(gender)
+  }, [gender])
+
+  useEffect(() => {
     let url = categoryId
       ? `/api/categories/${categoryId}/products`
       : '/api/products'
     url = search
       ? url + '?query=' + search
       : url
-    url = gender
-      ? url + '?gender=' + gender
+    url = filter
+      ? url + '?gender=' + filter
       : url
     dispatch(fetchProductsStartAsync(url, 20, 1))
     return () => dispatch(clearProducts())
-  }, [categoryId, dispatch, search, gender])
+  }, [categoryId, dispatch, search, filter])
 
   useEffect(() => {
     const getCategory = async () => {
@@ -134,7 +140,7 @@ const ProductsGrid = () => {
         }
       </header>
       <main className="flex flex-col lg:flex-row items-start">
-        <CategoriesScroller categoryId={categoryId} />
+        <CategoriesAndFilters categoryId={categoryId} setFilter={setFilter} />
         <hr className="mb-2 lg:hidden" />
         <div className="w-full pr-5 py-3 flex justify-between items-center lg:hidden">
           <span className="ml-5 text-gray-500">{`${totalProducts} Results`}</span>
@@ -149,7 +155,12 @@ const ProductsGrid = () => {
         <AnimatePresence>
           {
             filterModal
-              ? <FiltersModal ref={modal} gender={gender} handleClose={setFilterModal} />
+              ? <FiltersModal
+                ref={modal}
+                setFunction={setFilter}
+                gender={gender}
+                handleClose={setFilterModal}
+              />
               : ''
           }
         </AnimatePresence>

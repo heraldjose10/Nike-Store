@@ -5,8 +5,13 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { setCategories } from "../../redux/shop/shop.actions"
 import { selectCategories } from "../../redux/shop/shop.selectors"
+import useQueryParams from "../../hooks/useQueryParams"
 
-const CategoriesScroller = ({ categoryId }) => {
+import { FilterInput } from "../filters-modal/filters-modal.component"
+
+const CategoriesAndFilters = ({ categoryId, setFilter }) => {
+
+  const gender = useQueryParams('gender')
 
   const dispatch = useDispatch()
   const categories = useSelector(selectCategories)
@@ -37,13 +42,35 @@ const CategoriesScroller = ({ categoryId }) => {
               className={`min-w-fit pb-2 border-b-2 ${String(category.id) === categoryId ? 'border-b-black lg:underline' : 'border-b-white'} lg:my-2 lg:pb-0 lg:border-0`}
               key={category.id}
             >
-              <span className="mx-5" >{category.name}</span>
+              <p className="mx-5" >{category.name}</p>
             </Link>
           ))
           : ''
       }
+      <div className="hidden flex-col justify-between my-6 items-start mx-5 lg:flex">
+        <h1 className="text-2xl py-2">Filters</h1>
+        <div className="flex flex-col gap-2 items-start">
+          <h2 className="text-lg pb-1">Gender</h2>
+          <FilterInput
+            gender={gender}
+            filtername={'men'}
+            setFunction={setFilter}
+          />
+          <FilterInput
+            gender={gender}
+            filtername={'women'}
+            setFunction={setFilter}
+          />
+          <FilterInput
+            gender={gender}
+            filtername={'kids'}
+            setFunction={setFilter}
+          />
+        </div>
+        <hr className="my-5" />
+      </div>
     </aside>
   )
 }
 
-export default CategoriesScroller
+export default CategoriesAndFilters
