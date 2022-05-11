@@ -21,3 +21,13 @@ export const selectEmail = createSelector(
   [selectUser],
   user => user.email
 )
+
+export const selectUserError = createSelector(
+  [selectUser],
+  user => user.error
+)
+
+export const selectUserLoading = createSelector(
+  [selectUser],
+  user => user.fetching_auth_token
+)

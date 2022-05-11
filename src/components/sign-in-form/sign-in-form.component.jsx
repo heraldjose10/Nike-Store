@@ -1,20 +1,26 @@
-import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
+import { userSignInStartAsync } from "../../redux/user/user.actions"
+import { selectAccessToken, selectUserError, selectUserLoading } from "../../redux/user/user.selectors"
+import useScrollBarWidth from "../../hooks/useScrollBarWidth"
+
 import CustomButton from "../custom-button/custom-button.component"
 import CustomFormInput from "../custom-form-input/custom-form-input.component"
+import SignInError from "../sign-in-error/sign-in-error.component"
 
-import { userSignInStartAsync } from "../../redux/user/user.actions"
-import { selectAccessToken } from "../../redux/user/user.selectors"
 
 const SignInForm = ({ setShowSignUp, navigateAfterLogin }) => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const signInErrorRef = useRef()
 
   const accessToken = useSelector(selectAccessToken)
+  const signInError = useSelector(selectUserError)
+  const userLoading = useSelector(selectUserLoading)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -56,6 +62,20 @@ const SignInForm = ({ setShowSignUp, navigateAfterLogin }) => {
     else {
       dispatch(userSignInStartAsync({ username, password }));
     }
+  }
+
+  const root = document.getElementById('root')
+  const scrollBarWidth = useScrollBarWidth()
+
+  if (signInError) {
+    document.body.style.paddingRight = `${scrollBarWidth}px`
+    root.style.overflow = "hidden"
+    root.style.maxHeight = '100vh'
+  }
+  else {
+    document.body.style.paddingRight = `0px`
+    root.style.overflow = "auto"
+    root.style.maxHeight = 'unset'
   }
 
   return (
@@ -122,7 +142,7 @@ const SignInForm = ({ setShowSignUp, navigateAfterLogin }) => {
         </p>
         <CustomButton
           buttonAction={handleSignIn}
-          buttonText={'SIGN IN'}
+          buttonText={userLoading ? 'PROCESSING...' : 'SIGN IN'}
           customStyles={'rounded h-12 font-saira font-bold text-xl w-full'}
         />
       </form>
@@ -138,6 +158,13 @@ const SignInForm = ({ setShowSignUp, navigateAfterLogin }) => {
           Join Us
         </button>
       </p>
+      <AnimatePresence>
+        {
+          signInError
+            ? <SignInError ref={signInErrorRef} />
+            : ''
+        }
+      </AnimatePresence>
     </motion.div>
   )
 }

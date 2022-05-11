@@ -22,20 +22,20 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return INITIAL_STATE
     case userActionTypes.USER_REFRESH_START:
     case userActionTypes.USER_VALIDATE_START:
+    case userActionTypes.USER_SIGN_IN_START:
+    case userActionTypes.USER_SIGN_UP_START:
       return {
         ...state,
         fetching_auth_token: true
       }
     case userActionTypes.USER_VALIDATE_SUCCESS:
+    case userActionTypes.USER_SIGN_UP_ERROR:
+    case userActionTypes.USER_SIGN_UP_END:
       return {
         ...state,
         fetching_auth_token: false
       }
-    case userActionTypes.USER_SIGN_IN_START:
-      return {
-        ...state,
-        fetching_auth_token: true
-      }
+
     case userActionTypes.SET_ACCESS_TOKEN:
       return {
         ...state,
@@ -51,7 +51,13 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case userActionTypes.USER_SIGN_IN_ERROR:
       return {
         ...state,
+        fetching_auth_token: false,
         error: action.payload
+      }
+    case userActionTypes.CLEAR_ERROR:
+      return {
+        ...state,
+        error: null
       }
     default:
       return state

@@ -43,6 +43,22 @@ const userSignInError = error => ({
   payload: error
 })
 
+export const clearError = () => ({
+  type: userActionTypes.CLEAR_ERROR
+})
+
+export const userSignUpStart = () => ({
+  type: userActionTypes.USER_SIGN_UP_START
+})
+
+export const userSignUpError = () => ({
+  type: userActionTypes.USER_SIGN_UP_ERROR,
+})
+
+export const userSignUpEnd = () => ({
+  type: userActionTypes.USER_SIGN_UP_END
+})
+
 export const userSignInStartAsync = ({ username, password }) => {
   return async dispatch => {
     dispatch(userSignInStart())

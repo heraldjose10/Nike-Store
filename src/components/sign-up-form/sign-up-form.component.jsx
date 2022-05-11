@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 import CustomButton from "../custom-button/custom-button.component"
 import CustomFormInput from "../custom-form-input/custom-form-input.component"
+
+import { selectUserLoading } from "../../redux/user/user.selectors";
+import { userSignUpEnd, userSignUpError, userSignUpStart } from "../../redux/user/user.actions";
 
 const SignUpForm = ({ setShowSignUp }) => {
 
@@ -14,6 +18,10 @@ const SignUpForm = ({ setShowSignUp }) => {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [usernameError, setUsernameError] = useState('')
+
+  const dispatch = useDispatch()
+
+  const userLoading = useSelector(selectUserLoading)
 
   const handleEmailValidation = () => {
     if (email.split('@').length !== 2) {
@@ -56,10 +64,12 @@ const SignUpForm = ({ setShowSignUp }) => {
 
   const handleSignUp = async e => {
     e.preventDefault()
+    dispatch(userSignUpStart())
     handleEmailValidation()
     handleUsernameValidation()
     handlePasswordValidation()
     if (email.length === 0 || password.length === 0 || username.length === 0 || emailError || passwordError) {
+      dispatch(userSignUpError())
       return
     }
     else {
@@ -73,16 +83,16 @@ const SignUpForm = ({ setShowSignUp }) => {
             email: email
           }
         })
+        dispatch(userSignUpEnd())
         setShowSignUp(false)
       } catch (error) {
+        dispatch(userSignUpError())
         if (error.response.status === 409) {
           if ('email' in error.response.data['message']) {
             setEmailError(error.response.data['message']['email'])
-            console.log(error.response.data['message']);
           }
           else if ('username' in error.response.data['message']) {
             setUsernameError(error.response.data['message']['username'])
-            console.log(error.response.data['message']);
           }
           console.log(error);
         }
@@ -94,7 +104,7 @@ const SignUpForm = ({ setShowSignUp }) => {
     <motion.div
       initial={{ opacity: 0, y: 200 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ease: 'easeOut', duration:.2}}
+      transition={{ ease: 'easeOut', duration: .2 }}
     >
       <h1 className="my-6 text-2xl font-saira font-bold uppercase px-6 text-center">
         Become a Nike Member
@@ -156,7 +166,8 @@ const SignUpForm = ({ setShowSignUp }) => {
         </p>
         <CustomButton
           buttonLink={''}
-          buttonText={'JOIN US'}
+          buttonText={userLoading ? 'PROCESSING...' : 'JOIN US'}
+          // buttonText={'JOIN US'}
           customStyles={'rounded h-12 font-saira font-bold text-xl'}
           buttonAction={handleSignUp}
         />
