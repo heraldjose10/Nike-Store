@@ -25,7 +25,7 @@ export const addToCart = (cartItems, item) => {
 
 export const deleteFromCart = (cartItems, item) => {
   const newCart = cartItems.filter(cartItem =>
-    (cartItem.id !== item.id || (cartItem.style_name !== item.style_name))
+    (cartItem.style_id !== item.style_id || (cartItem.style_name !== item.style_name))
   )
   return newCart
 }

@@ -48,18 +48,21 @@ class CartItems(db.Model):
     )
     item_count = db.Column(db.Integer)
 
-    users = db.relationship('Users', backref=backref('product_styles', lazy='dynamic'))
-    product_styles = db.relationship('ProductStyles', backref=backref('users', lazy='dynamic'))
+    users = db.relationship('Users', backref=backref(
+        'product_styles', lazy='dynamic'))
+    product_styles = db.relationship(
+        'ProductStyles', backref=backref('users', lazy='dynamic'))
 
     def get_item_details(self):
         return {
-            'count':self.item_count,
-            'id':self.product_style_id,
+            'count': self.item_count,
+            'id': self.product_styles.product_id,
+            'style_id': self.product_style_id,
             'name': self.product_styles.product.name,
-            'price':float(self.product_styles.product.price),
-            'colour':self.product_styles.colour,
-            'images':[self.product_styles.images[0].image_url] if self.product_styles.images and len(self.product_styles.images)>0 else [],
-            'short_description':self.product_styles.product.short_description
+            'price': float(self.product_styles.product.price),
+            'colour': self.product_styles.colour,
+            'images': [self.product_styles.images[0].image_url] if self.product_styles.images and len(self.product_styles.images) > 0 else [],
+            'short_description': self.product_styles.product.short_description
         }
 
     def __repr__(self) -> str:

@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Fragment, useLayoutEffect } from "react"
 
 import {
+  selectCartIsLoading,
   selectCartItems,
   selectCartTotal,
   selectTotalCartItems
@@ -11,6 +12,7 @@ import { getCartStartAsync, emptyCart } from "../../redux/cart/cart.actions"
 
 import CartItem from "../../components/cart-item/cart-item.component"
 import CustomButton from "../../components/custom-button/custom-button.component"
+import Loader from "../../components/loader.component.jsx/loader.component"
 
 const Cart = () => {
 
@@ -21,6 +23,7 @@ const Cart = () => {
   const cartTotal = useSelector(selectCartTotal)
   const accessToken = useSelector(selectAccessToken)
   const refreshToken = useSelector(selectRefreshToken)
+  const cartIsLoading = useSelector(selectCartIsLoading)
 
   useLayoutEffect(() => {
     dispatch(emptyCart())
@@ -41,21 +44,25 @@ const Cart = () => {
         <div className="w-[90%] border-t border-[#e5e5e5] h-[1px] lg:hidden"></div>
         <h1 className="hidden lg:block text-2xl self-start px-4">Bag</h1>
         {
-          cartItems.map((item, index) => (
-            <Fragment key={index}>
-              <CartItem
-                item={{ ...item }}
-                accessToken={accessToken}
-                refreshToken={refreshToken}
-              />
-              <div className="w-[90%] border-t border-[#e5e5e5] h-[1px]"></div>
-            </Fragment>
+          cartIsLoading
+            ? <Loader />
+            : (
+              cartItems.map((item, index) => (
+                <Fragment key={index}>
+                  <CartItem
+                    item={{ ...item }}
+                    accessToken={accessToken}
+                    refreshToken={refreshToken}
+                  />
+                  <div className="w-[90%] border-t border-[#e5e5e5] h-[1px]"></div>
+                </Fragment>
 
-          ))
+              ))
+            )
         }
 
         {
-          !cartTotal && (
+          (!cartTotal && !cartIsLoading) && (
             <p className="w-full text-left px-4">There are no items in your bag.</p>
           )
         }

@@ -21,3 +21,8 @@ export const selectItem = item => createSelector(
   [selectCart],
   cart => cart.items.filter(i => i.id === item.id && i.name === item.name)
 )
+
+export const selectCartIsLoading = createSelector(
+  [selectCart],
+  cart => cart.isLoading
+)

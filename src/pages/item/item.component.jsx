@@ -60,15 +60,15 @@ const Item = () => {
 
   const handleAddToCart = () => {
     const item = {
+      ...currentStyle,
       id: currentProduct.id,
       name: currentProduct.name,
       price: currentProduct.price,
       short_description: currentProduct.short_description,
-      ...currentStyle
+      style_id: currentStyle.id
     }
-    const cartItem = cartItems.filter(i => i.id === item.id)[0]
+    const cartItem = cartItems.filter(i => i.style_id === item.style_id)[0]
     const count = cartItem ? cartItem['count'] += 1 : 1
-    console.log(count);
     if (accessToken) {
       count === 1
         ? dispatch(setCartItemStartAsync(

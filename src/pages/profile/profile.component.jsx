@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick"
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/opacity.css';
 
 import { selectEmail, selectUserName } from "../../redux/user/user.selectors"
 
@@ -81,10 +83,14 @@ const Profile = () => {
             {
               benefits.map((benefit, index) => (
                 <div key={index} className="shrink-0 max-w-[92%] flex flex-col gap-6">
-                  <img
-                    src={benefit.image} // todo: fix jumping of images on load
-                    alt="benefit banner"
-                  />
+                  <div className="w-full h-0 relative pt-[62.5%] hover:cursor-pointer">
+                    <LazyLoadImage
+                      src={benefit.image}
+                      alt="benefit banner"
+                      effect="opacity"
+                      className='w-full absolute top-0 left-0'
+                    />
+                  </div>
                   <span className="leading-tight md:text-lg">
                     {benefit.title}
                   </span>

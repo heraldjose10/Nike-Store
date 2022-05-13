@@ -68,7 +68,7 @@ export const setCartItemStartAsync = (token, url, item, count, refresh_token) =>
       await axios({
         method: 'post',
         url: url,
-        data: { style_id: item['id'], item_count: count },
+        data: { style_id: item['style_id'], item_count: count },
         headers: { Authorization: `Bearer ${token}` }
       })
       dispatch(setCartItem(item))
@@ -92,7 +92,7 @@ export const deleteFromCartAsync = (token, url, item, refresh_token) => {
       await axios({
         method: 'delete',
         url: url,
-        data: { style_id: item['id'] },
+        data: { style_id: item['style_id'] },
         headers: { Authorization: `Bearer ${token}` }
       })
       dispatch(deleteFromCart(item))
@@ -139,7 +139,7 @@ export const updateCartItemAsync = (token, refresh_token, item, count, url) => {
       await axios({
         method: 'patch',
         url: url,
-        data: { style_id: item['id'], item_count: count },
+        data: { style_id: item.style_id, item_count: count },
         headers: { Authorization: `Bearer ${token}` }
       })
       updateCartItem(item)

@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import { useNavigate } from "react-router-dom"
 import { RiDeleteBinLine, RiHeartLine } from "react-icons/ri"
 import { useDispatch } from "react-redux"
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/opacity.css';
 
 import { deleteFromCartAsync } from "../../redux/cart/cart.actions"
 
@@ -24,11 +26,13 @@ const CartItem = ({ item, accessToken, refreshToken }) => {
       className="flex px-4 gap-4 my-6 w-full"
     >
       <div className="shrink-0">
-        <img
-          className="w-20 h-20 object-cover hover:cursor-pointer md:w-[150px] md:h-[150px]"
-          onClick={() => navigate(`/shop/product/${id}`)} //fix this! dont navigate with this id
+        
+        <LazyLoadImage
           alt='product thumbnail'
           src={images[0]}
+          effect="opacity"
+          className="w-20 h-20 object-cover hover:cursor-pointer md:w-[150px] md:h-[150px]"
+          onClick={() => navigate(`/shop/product/${id}`)}
         />
       </div>
       <div className="grow flex-col flex">
