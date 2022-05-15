@@ -54,6 +54,7 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         ...state,
         products: {
           ...state.products,
+          isFetching:false,
           error: action.payload
         }
       }
@@ -91,6 +92,7 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         ...state,
         currentProduct: {
           ...state.currentProduct,
+          isFetching:false,
           error: action.payload
         }
       }

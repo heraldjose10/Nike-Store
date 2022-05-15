@@ -15,7 +15,8 @@ import { setCartItemStartAsync, updateCartItemAsync } from "../../redux/cart/car
 import {
   selectCurrentProductItem,
   selectCurrentStyle,
-  selectCurrentProductIsFetching
+  selectCurrentProductIsFetching,
+  selectCurrentProductError
 } from "../../redux/shop/shop.selectors"
 import { selectAccessToken, selectRefreshToken } from "../../redux/user/user.selectors";
 import { selectCartItems } from "../../redux/cart/cart.selectors";
@@ -37,6 +38,7 @@ const Item = () => {
   const accessToken = useSelector(selectAccessToken)
   const refreshToken = useSelector(selectRefreshToken)
   const cartItems = useSelector(selectCartItems)
+  const currentProductError = useSelector(selectCurrentProductError)
 
   useLayoutEffect(() => {
     dispatch(fetchCurrentProductStart())
@@ -107,71 +109,84 @@ const Item = () => {
           )
           : ''
       }
-      <div className="grow-0 basis-1/3">
-        {
-          currentProduct
-            ? (
-              <div className="m-5 my-6">
-                <h1 className="  text-2xl">
-                  {currentProduct['name']}
-                </h1>
-                <p>{currentProduct['short_description']}</p>
-                <p className="mt-6">{`₹${currentProduct['price']}`}</p>
-                <p className="text-gray-500">incl. of taxes and duties</p>
-              </div>
-            )
-            : ''
-        }
+      {
+        !currentProductError && (
+          <div className="grow-0 basis-1/3">
+            {
+              currentProduct
+                ? (
+                  <div className="m-5 my-6">
+                    <h1 className="  text-2xl">
+                      {currentProduct['name']}
+                    </h1>
+                    <p>{currentProduct['short_description']}</p>
+                    <p className="mt-6">{`₹${currentProduct['price']}`}</p>
+                    <p className="text-gray-500">incl. of taxes and duties</p>
+                  </div>
+                )
+                : ''
+            }
 
-        {/* sliding product images */}
+            {/* sliding product images */}
 
-        {
-          currentStyle && currentStyle['images']
-            ? <ImageSlider images={currentStyle['images']} />
-            : ''
-        }
+            {
+              currentStyle && currentStyle['images']
+                ? <ImageSlider images={currentStyle['images']} />
+                : ''
+            }
 
-        {/* horizontal styles scrolling button */}
-        {
-          currentProduct && currentStyle
-            ? <StylesScroller styles={currentProduct['styles']} currentStyle={currentStyle} />
-            : ''
-        }
-        <div className="flex flex-col my-3 px-10">
-          <CustomButton
-            buttonAction={handleAddToCart}
-            buttonText={'Add to Bag'}
-            padding_y={5}
-          />
-          <CustomButton buttonText={'Favourite'} inverted={true} padding_y={5} />
-        </div>
-        <div className="mx-5 my-8 font-light">
-          {
-            currentProduct
-              ? <p className="leading-loose py-5">{currentProduct['long_description']}</p>
-              : ''
-          }
-          {
-            currentStyle
-              ? (
-                <ul className="list-disc px-5">
-                  <li>{`Colour Shown: ${currentStyle.colour}`}</li>
-                  <li>{`Style: ${currentStyle.style_name}`}</li>
-                </ul>
+            {/* horizontal styles scrolling button */}
+            {
+              currentProduct && currentStyle
+                ? <StylesScroller styles={currentProduct['styles']} currentStyle={currentStyle} />
+                : ''
+            }
+            {
+              currentProduct && (
+                <div className="flex flex-col my-3 px-10">
+                  <CustomButton
+                    buttonAction={handleAddToCart}
+                    buttonText={'Add to Bag'}
+                    padding_y={5}
+                  />
+                  <CustomButton buttonText={'Favourite'} inverted={true} padding_y={5} />
+                </div>
               )
-              : ''
-          }
-        </div>
-      </div>
+            }
+            <div className="mx-5 my-8 font-light">
+              {
+                currentProduct
+                  ? <p className="leading-loose py-5">{currentProduct['long_description']}</p>
+                  : ''
+              }
+              {
+                currentStyle
+                  ? (
+                    <ul className="list-disc px-5">
+                      <li>{`Colour Shown: ${currentStyle.colour}`}</li>
+                      <li>{`Style: ${currentStyle.style_name}`}</li>
+                    </ul>
+                  )
+                  : ''
+              }
+            </div>
+          </div>
+        )
+      }
     </Fragment>
   )
 
   return (
     <main className="py-3 lg:flex lg:mx-5 max-w-[1440px] self-center">
       {
-        currentProductIsLoading
+        currentProductIsLoading && !currentProductError
           ? <Loader />
           : ProductUI
+      }
+      {
+        !currentProductIsLoading && currentProductError && (
+          <div className="my-10">There was an error loading this product</div>
+        )
       }
     </main>
   )

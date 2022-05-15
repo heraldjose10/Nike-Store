@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Fragment, useLayoutEffect } from "react"
 
 import {
+  selectCartError,
   selectCartIsLoading,
   selectCartItems,
   selectCartTotal,
@@ -24,6 +25,7 @@ const Cart = () => {
   const accessToken = useSelector(selectAccessToken)
   const refreshToken = useSelector(selectRefreshToken)
   const cartIsLoading = useSelector(selectCartIsLoading)
+  const cartError = useSelector(selectCartError)
 
   useLayoutEffect(() => {
     dispatch(emptyCart())
@@ -62,8 +64,17 @@ const Cart = () => {
         }
 
         {
-          (!cartTotal && !cartIsLoading) && (
-            <p className="w-full text-left px-4">There are no items in your bag.</p>
+          (!cartTotal && !cartIsLoading && !cartError) && (
+            <p className="w-full px-4 text-center lg:text-left">
+              There are no items in your bag.
+            </p>
+          )
+        }
+        {
+          (cartError) && (
+            <p className="w-full px-4 text-center lg:text-left">
+              There was an error loading cart
+            </p>
           )
         }
       </div>

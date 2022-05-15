@@ -7,6 +7,11 @@ export const selectProducts = createSelector(
   shop => shop.products
 )
 
+export const selectProductsError = createSelector(
+  [selectProducts],
+  products => products.error
+)
+
 export const selectProductItems = createSelector(
   [selectProducts],
   products => products.items
@@ -55,4 +60,9 @@ export const selectCurrentProductItem = createSelector(
 export const selectCurrentProductIsFetching = createSelector(
   [selectCurrentProduct],
   currentProduct => currentProduct.isFetching
+)
+
+export const selectCurrentProductError = createSelector(
+  [selectCurrentProduct],
+  currentProduct => currentProduct.error
 )

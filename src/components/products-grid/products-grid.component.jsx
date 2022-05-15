@@ -15,7 +15,8 @@ import {
   selectCurrentCategory,
   selectProductItems,
   selectTotalProducts,
-  selectProductsIsFetching
+  selectProductsIsFetching,
+  selectProductsError
 } from "../../redux/shop/shop.selectors";
 import useQueryParams from "../../hooks/useQueryParams";
 import useScrollBarWidth from "../../hooks/useScrollBarWidth";
@@ -43,6 +44,7 @@ const ProductsGrid = () => {
   const products = useSelector(selectProductItems)
   const nextURL = useSelector(selectNextURL)
   const isLoadingProducts = useSelector(selectProductsIsFetching)
+  const productsError = useSelector(selectProductsError)
 
   const observer = useRef()
   const modal = useRef()
@@ -131,7 +133,7 @@ const ProductsGrid = () => {
     root.style.overflow = "auto"
     root.style.maxHeight = 'unset'
   }
-
+  console.log(productsError);
   return (
     <Fragment>
       <header className="p-5 text-2xl font-sans font-medium sticky top-0 z-10 bg-white">
@@ -179,11 +181,18 @@ const ProductsGrid = () => {
                     )
                     : <ProductCard key={p.id} {...p} />
                 ))
-                : !isLoadingProducts && <p>No Products!</p>
+                : !isLoadingProducts && !productsError && <p>No Products!</p>
+            }
+            {
+              productsError && (
+                <div className="col-span-2 text-center my-10 lg:col-span-3">
+                  There was an error loading products
+                </div>
+              )
             }
           </section>
           {
-            isLoadingProducts
+            isLoadingProducts && !productsError
               ? <Loader />
               : <div ref={lastProductRef}></div>
           }

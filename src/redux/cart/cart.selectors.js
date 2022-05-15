@@ -26,3 +26,8 @@ export const selectCartIsLoading = createSelector(
   [selectCart],
   cart => cart.isLoading
 )
+
+export const selectCartError = createSelector(
+  [selectCart],
+  cart => cart.error
+)

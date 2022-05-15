@@ -23,7 +23,8 @@ const cartReducer = (state = INITIAL_STATE, action) => {
     case cartActionTypes.UPDATE_CART_START:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        error: null
       }
     case cartActionTypes.SET_CART_ITEM_ERROR:
       return {

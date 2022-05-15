@@ -118,16 +118,17 @@ export const getCartStartAsync = (token, refresh_token, url) => {
         url: url,
         headers: { Authorization: `Bearer ${token}` }
       })
+      console.log(response);
       dispatch(setCart(response.data['items']))
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
           dispatch(userRefreshStartAsync(refresh_token, getCartStartAsync, [refresh_token, url]))
         }
-        else {
-          dispatch(getCartError(error))
-        }
-      };
+      }
+      else {
+        dispatch(getCartError(error))
+      }
     }
   }
 }
