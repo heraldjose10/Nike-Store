@@ -3,6 +3,16 @@ from datetime import datetime
 from backend import db, bcrypt
 
 
+# association table for adding product styles to users favorites
+favorites = db.Table(
+    'favorites',
+    db.Column('user_id', db.Integer, db.ForeignKey(
+        'users.id'), primary_key=True),
+    db.Column('style_id', db.Integer, db.ForeignKey(
+        'product_styles.id'), primary_key=True)
+)
+
+
 class Users(db.Model):
     """database model for user"""
     id = db.Column(db.Integer, primary_key=True)
@@ -11,6 +21,8 @@ class Users(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     _created = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
+    favorites = db.relationship(
+        'ProductStyles', secondary=favorites)
 
     def set_password(self, password):
         """sets password of User object

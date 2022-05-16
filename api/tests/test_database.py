@@ -80,6 +80,33 @@ class DataBaseTestCase(ApiBaseTestCase):
         all_cart = CartItems.query.all()
         self.assertEqual(2, len(all_cart))
 
+    def test_add_to_favorites(self):
+        """test add to favorites functionality"""
+        user1 = Users(username='userone', email='userone@mail.com')
+        user1.set_password('userone_password')
+
+        db.session.add(user1)
+
+        style1 = ProductStyles.query.filter_by(id=14).first()
+        style2 = ProductStyles.query.filter_by(id=18).first()
+        style3 = ProductStyles.query.filter_by(id=19).first()
+
+        self.assertEqual(0, len(user1.favorites))
+
+        # add items to favorites
+        user1.favorites.append(style1)
+        user1.favorites.append(style2)
+        user1.favorites.append(style3)
+
+        self.assertEqual(3, len(user1.favorites))
+        self.assertEqual(14, user1.favorites[0].id)
+
+        # remove style1 from favorites
+        user1.favorites.remove(style1)
+
+        self.assertEqual(2, len(user1.favorites))
+
+
     def test_product_images(self):
         """test product images table"""
         product_image = ProductImages.query.filter_by(id=1).first()
