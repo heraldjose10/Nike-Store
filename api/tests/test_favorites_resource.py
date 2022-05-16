@@ -1,13 +1,15 @@
 import json
-from tests import ApiBaseTestCase
 from base64 import b64encode
 
+from tests import ApiBaseTestCase
 
-class CartItemsTestCase(ApiBaseTestCase):
-    """test cases for cart item resources"""
 
-    def test_cart_item(self):
-        """test routes for adding, deleting and updating a cart item"""
+class FavoritesTestCase(ApiBaseTestCase):
+    """test cases for favorites resource"""
+
+    def test_favorites(self):
+        """tests routes for adding, removing, displaying favorites"""
+
         username = 'user'
         password = 'user_password'
         email = 'user@mail.com'
@@ -35,47 +37,37 @@ class CartItemsTestCase(ApiBaseTestCase):
 
         headers = {'Authorization': f'Bearer {access_token}'}
 
-        # add an item to cart
+        # add item to favorites
         self.test_client.post(
-            'api/cartitems',
+            'api/favorites',
             headers=headers,
-            json={'style_id': 12, 'item_count': 2}
+            json={'style_id': 45}
         )
 
         response = self.test_client.get(
-            'api/cartitems',
+            'api/favorites',
             headers=headers
         )
         self.assertNotEqual(0, len(response.json['items']))
-        self.assertEqual(2, response.json['items'][0]['count'])
+        self.assertEqual(45, response.json['items'][0]['style_id'])
+        
+        # add another item to favorites
+        self.test_client.post(
+            'api/favorites',
+            headers=headers,
+            json={'style_id': 4}
+        )
 
-        # delete an item from cart
+        # remove an item from favorites
         self.test_client.delete(
-            'api/cartitems',
+            'api/favorites',
             headers=headers,
-            json={'style_id': 12}
+            json={'style_id': 45}
         )
-        response = self.test_client.get(
-            'api/cartitems',
-            headers=headers
-        )
-        self.assertEqual(0, len(response.json['items']))
 
-        # add an item and update it
-        self.test_client.post(
-            'api/cartitems',
-            headers=headers,
-            json={'style_id': 10, 'item_count': 2}
-        )
-        self.test_client.patch(
-            'api/cartitems',
-            headers=headers,
-            json={'style_id': 10, 'item_count': 4}
-        )
         response = self.test_client.get(
-            'api/cartitems',
+            'api/favorites',
             headers=headers
         )
-        self.assertNotEqual(0, len(response.json['items']))
-        self.assertEqual(10, response.json['items'][0]['style_id'])
-        self.assertEqual(4, response.json['items'][0]['count'])
+        self.assertEqual(1, len(response.json['items']))
+        self.assertEqual(4, response.json['items'][0]['style_id'])

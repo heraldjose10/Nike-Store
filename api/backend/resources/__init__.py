@@ -1,4 +1,6 @@
 from flask_restful import Api
+
+from backend.resources.favorites import Favorites
 from backend.resources.cart_items import CartItems
 from backend.resources.products import Products, ProductsList, ProductsListFromCategory
 from backend.resources.users import Users
@@ -18,3 +20,5 @@ api.add_resource(Categories, '/api/categories/<int:id>', endpoint='category')
 api.add_resource(CategoriesList, '/api/categories', endpoint='category_list')
 
 api.add_resource(CartItems, '/api/cartitems', endpoint='cart_item')
+
+api.add_resource(Favorites, '/api/favorites', endpoint='favorites')

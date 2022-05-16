@@ -37,6 +37,17 @@ class ProductStyles(db.Model):
     product = db.relationship('Products', back_populates='product_styles')
     images = db.relationship('ProductImages', back_populates='product_style')
 
+    def get_style_details(self):
+        return {
+            'id': self.product_id,
+            'style_id': self.id,
+            'name': self.product.name,
+            'price': float(self.product.price),
+            'colour': self.colour,
+            'images': [self.images[0].image_url] if self.images and len(self.images) > 0 else [],
+            'short_description': self.product.short_description
+        }
+
     def __repr__(self) -> str:
         return f'< ProductStyle {self.id} {self.style_name} >'
 
