@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ReactComponent as NikeIcon } from './../../icons/nike-4-logo-svg-vector.svg'
 import { BsBag } from 'react-icons/bs'
 import { FaRegUserCircle } from 'react-icons/fa'
+import { AiOutlineHeart } from 'react-icons/ai'
 
 import Search from "../search/search.component";
 
@@ -21,7 +22,16 @@ const NavBar = () => {
       navigate('/register', { state: { from: location } })
     }
     else {
-      navigate('/profile')
+      navigate('/profile', { state: { toShow: 'Profile' } })
+    }
+  }
+
+  const handleFavoritesButtonClick = () => {
+    if (!accessToken) {
+      navigate('/register', { state: { from: location } }) // from should be the page to be redirected to?
+    }
+    else {
+      navigate('/profile', { state: { toShow: 'Favorites' } })
     }
   }
 
@@ -69,6 +79,10 @@ const NavBar = () => {
         <BsBag
           className="h-6 w-6 hover:cursor-pointer"
           onClick={handleCartButtonClick}
+        />
+        <AiOutlineHeart
+          className="h-7 w-7 hover:cursor-pointer"
+          onClick={handleFavoritesButtonClick}
         />
         <button
           className="hover:cursor-pointer"

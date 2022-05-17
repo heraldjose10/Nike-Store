@@ -12,6 +12,7 @@ import {
   fetchCurrentProductStart
 } from "../../redux/shop/shop.actions"
 import { setCartItemStartAsync, updateCartItemAsync } from "../../redux/cart/cart.actions";
+import { setFavoriteStartAsync } from "../../redux/favorites/favorites.actions";
 import {
   selectCurrentProductItem,
   selectCurrentStyle,
@@ -93,6 +94,23 @@ const Item = () => {
     }
   }
 
+  const handleAddToFavorites = () => {
+    const item = {
+      ...currentStyle,
+      id: currentProduct.id,
+      name: currentProduct.name,
+      price: currentProduct.price,
+      short_description: currentProduct.short_description,
+      style_id: currentStyle.id
+    }
+    dispatch(setFavoriteStartAsync(
+      accessToken,
+      '/api/favorites',
+      item,
+      refreshToken
+    ))
+  }
+
   const ProductUI = (
     <Fragment>
       {/* images grid for large devices */}
@@ -149,7 +167,12 @@ const Item = () => {
                     buttonText={'Add to Bag'}
                     padding_y={5}
                   />
-                  <CustomButton buttonText={'Favourite'} inverted={true} padding_y={5} />
+                  <CustomButton
+                    buttonAction={handleAddToFavorites}
+                    buttonText={'Favourite'}
+                    inverted={true}
+                    padding_y={5}
+                  />
                 </div>
               )
             }
