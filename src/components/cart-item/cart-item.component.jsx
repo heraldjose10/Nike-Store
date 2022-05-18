@@ -1,21 +1,47 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from "react-router-dom"
-import { RiDeleteBinLine, RiHeartLine } from "react-icons/ri"
-import { useDispatch } from "react-redux"
+import { RiDeleteBinLine } from "react-icons/ri"
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
+import { useDispatch, useSelector } from "react-redux"
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/opacity.css';
 
 import { deleteFromCartAsync } from "../../redux/cart/cart.actions"
+import {
+  deleteFavoriteStartAsync,
+  setFavoriteStartAsync
+} from '../../redux/favorites/favorites.actions';
+import { selectItemInFavorites } from '../../redux/favorites/favorites.selectors';
 
 const CartItem = ({ item, accessToken, refreshToken }) => {
 
-  const { id, name, short_description, price, count, images, colour } = item
-
+  const { id, name, short_description, price, count, images, colour, style_id } = item
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const itemInFavorites = useSelector(selectItemInFavorites(style_id))
+  console.log(itemInFavorites);
+
   const handleDeleteFromCart = () => {
     dispatch(deleteFromCartAsync(accessToken, '/api/cartitems', item, refreshToken))
+  }
+
+  const handleAddToFavorites = () => {
+    dispatch(setFavoriteStartAsync(
+      accessToken,
+      '/api/favorites',
+      item,
+      refreshToken
+    ))
+  }
+
+  const handleRemoveFromFavorites = (item) => {
+    dispatch(deleteFavoriteStartAsync(
+      accessToken,
+      '/api/favorites',
+      item,
+      refreshToken
+    ))
   }
 
   return (
@@ -26,7 +52,7 @@ const CartItem = ({ item, accessToken, refreshToken }) => {
       className="flex px-4 gap-4 my-6 w-full"
     >
       <div className="shrink-0">
-        
+
         <LazyLoadImage
           alt='product thumbnail'
           src={images[0]}
@@ -47,12 +73,25 @@ const CartItem = ({ item, accessToken, refreshToken }) => {
         <p className="text-gray-500">{`Quantity ${count}`}</p>
         <p className="flex gap-3 my-2">
           <RiDeleteBinLine
-            onClick={handleDeleteFromCart}
-            className="w-6 h-6 hover:cursor-pointer hover:text-gray-500"
+            onClick={handleDeleteFromCart} // animate deletion from cart
+            className="w-6 h-6 hover:cursor-pointer hover:text-gray-500 hover:scale-150 transition ease-in-out"
           />
-          <RiHeartLine
-            className="w-6 h-6 hover:cursor-pointer hover:text-gray-500"
-          />
+
+          {
+            itemInFavorites
+              ? (
+                <AiFillHeart
+                  onClick={() => handleRemoveFromFavorites(item)}
+                  className='w-6 h-6 hover:cursor-pointer hover:text-gray-500 hover:scale-150 transition ease-in-out'
+                />
+              )
+              : (
+                <AiOutlineHeart
+                  onClick={handleAddToFavorites}
+                  className="w-6 h-6 hover:cursor-pointer hover:text-gray-500 hover:scale-150 transition ease-in-out"
+                />
+              )
+          }
         </p>
       </div>
       <div className="max-w-[100px] shrink-0 grow">

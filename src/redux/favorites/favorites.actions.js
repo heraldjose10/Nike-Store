@@ -80,13 +80,37 @@ export const setFavoritesStart = (token, url, refresh_token) => {
       })
       dispatch(setFavorites(response.data.items));
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         if (error.response.data['msg'] === 'Token has expired') {
           dispatch(userRefreshStartAsync(refresh_token, setFavoritesStart, [url, refresh_token]))
         }
       }
       else {
-        dispatch(setFavoriteError(error))
+        dispatch(getFavoritesError(error))
+      };
+    }
+  }
+}
+
+export const deleteFavoriteStartAsync = (token, url, item, refresh_token) => {
+  return async dispatch => {
+    dispatch(deleteFavoriteStart())
+    try {
+      axios({
+        method: 'delete',
+        url: url,
+        data: { style_id: item['style_id'] },
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      dispatch(deleteFavoriteItem(item))
+    } catch (error) {
+      if (error.response.status === 401) {
+        if (error.response.data['msg'] === 'Token has expired') {
+          dispatch(userRefreshStartAsync(refresh_token, deleteFavoriteStartAsync, [url, item, refresh_token]))
+        }
+      }
+      else {
+        dispatch(deleteFavoriteError(error))
       };
     }
   }

@@ -2,6 +2,7 @@ import { Fragment, useEffect, useLayoutEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { LazyLoadImage } from "react-lazy-load-image-component"
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import {
@@ -12,7 +13,7 @@ import {
   fetchCurrentProductStart
 } from "../../redux/shop/shop.actions"
 import { setCartItemStartAsync, updateCartItemAsync } from "../../redux/cart/cart.actions";
-import { setFavoriteStartAsync } from "../../redux/favorites/favorites.actions";
+import { deleteFavoriteStartAsync, setFavoriteStartAsync } from "../../redux/favorites/favorites.actions";
 import {
   selectCurrentProductItem,
   selectCurrentStyle,
@@ -21,11 +22,13 @@ import {
 } from "../../redux/shop/shop.selectors"
 import { selectAccessToken, selectRefreshToken } from "../../redux/user/user.selectors";
 import { selectCartItems } from "../../redux/cart/cart.selectors";
+import { selectItemInFavorites } from '../../redux/favorites/favorites.selectors';
 
 import CustomButton from "../../components/custom-button/custom-button.component"
 import ImageSlider from "../../components/images-slider/images-slider.component"
 import StylesScroller from "../../components/styles-scroller/styles-scroller.component"
 import Loader from "../../components/loader.component.jsx/loader.component"
+
 
 const Item = () => {
   const { productId } = useParams()
@@ -40,6 +43,7 @@ const Item = () => {
   const refreshToken = useSelector(selectRefreshToken)
   const cartItems = useSelector(selectCartItems)
   const currentProductError = useSelector(selectCurrentProductError)
+  const itemInFavorites = useSelector(selectItemInFavorites(currentStyle?.id))
 
   useLayoutEffect(() => {
     dispatch(fetchCurrentProductStart())
@@ -61,15 +65,16 @@ const Item = () => {
     return () => dispatch(clearCurrentStyle())
   }, [dispatch, currentProduct])
 
+  const item = {
+    ...currentStyle,
+    id: currentProduct?.id,
+    name: currentProduct?.name,
+    price: currentProduct?.price,
+    short_description: currentProduct?.short_description,
+    style_id: currentStyle?.id
+  }
+
   const handleAddToCart = () => {
-    const item = {
-      ...currentStyle,
-      id: currentProduct.id,
-      name: currentProduct.name,
-      price: currentProduct.price,
-      short_description: currentProduct.short_description,
-      style_id: currentStyle.id
-    }
     const cartItem = cartItems.filter(i => i.style_id === item.style_id)[0]
     const count = cartItem ? cartItem['count'] += 1 : 1
     if (accessToken) {
@@ -95,15 +100,16 @@ const Item = () => {
   }
 
   const handleAddToFavorites = () => {
-    const item = {
-      ...currentStyle,
-      id: currentProduct.id,
-      name: currentProduct.name,
-      price: currentProduct.price,
-      short_description: currentProduct.short_description,
-      style_id: currentStyle.id
-    }
     dispatch(setFavoriteStartAsync(
+      accessToken,
+      '/api/favorites',
+      item,
+      refreshToken
+    ))
+  }
+
+  const handleRemoveFromFavorites = (item) => {
+    dispatch(deleteFavoriteStartAsync(
       accessToken,
       '/api/favorites',
       item,
@@ -168,8 +174,21 @@ const Item = () => {
                     padding_y={5}
                   />
                   <CustomButton
-                    buttonAction={handleAddToFavorites}
-                    buttonText={'Favourite'}
+                    buttonAction={() => {
+                      itemInFavorites
+                        ? handleRemoveFromFavorites(item)
+                        : handleAddToFavorites()
+                    }}
+                    buttonText={
+                      <p className="flex justify-center items-center gap-1">
+                        <span>Favourite</span>
+                        {
+                          itemInFavorites
+                            ? <AiFillHeart className="w-6 h-6" />
+                            : <AiOutlineHeart className="w-6 h-6" />
+                        }
+                      </p>
+                    }
                     inverted={true}
                     padding_y={5}
                   />

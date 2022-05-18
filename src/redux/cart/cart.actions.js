@@ -118,7 +118,6 @@ export const getCartStartAsync = (token, refresh_token, url) => {
         url: url,
         headers: { Authorization: `Bearer ${token}` }
       })
-      console.log(response);
       dispatch(setCart(response.data['items']))
     } catch (error) {
       if (error.response?.status === 401) {

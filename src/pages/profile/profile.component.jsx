@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick"
@@ -25,7 +25,8 @@ const Profile = () => {
 
   const username = useSelector(selectUserName)
   const email = useSelector(selectEmail)
-  const toShow = location.state.toShow
+
+  const [toShow, setToShow] = useState(location.state.toShow)
 
   const settings = {
     dots: false,
@@ -56,8 +57,19 @@ const Profile = () => {
         {
           options.map((option, index) => (
             option === toShow
-              ? <span key={index} className="text-[#979797]">{option}</span>
-              : <span key={index} className="hover:cursor-pointer">{option}</span>
+              ? <span
+                key={index}
+                className="text-[#979797]"
+              >
+                {option}
+              </span>
+              : <span
+                key={index}
+                className="hover:cursor-pointer"
+                onClick={() => setToShow(option)}
+              >
+                {option}
+              </span>
           ))
         }
       </div>

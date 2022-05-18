@@ -3,8 +3,8 @@ import 'react-lazy-load-image-component/src/effects/opacity.css';
 
 import product_images from "../../data/product_images"
 
-const ProductCard = ({ pic, short_description, price, category, name, width }) => (
-  <div className={`${width ? width : 'w-[50vw-8px] lg:w-[25vw]'} mb-2`}>
+const ProductCard = ({ pic, short_description, price, category, name, width, style }) => (
+  <div className={`${width ? width : 'w-[50vw-8px] lg:w-[25vw]'} mb-2 ${style}`}>
     <LazyLoadImage
       effect="opacity"
       src={
