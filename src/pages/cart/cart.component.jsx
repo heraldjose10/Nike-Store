@@ -58,7 +58,6 @@ const Cart = () => {
                   />
                   <div className="w-[90%] border-t border-[#e5e5e5] h-[1px]"></div>
                 </Fragment>
-
               ))
             )
         }

@@ -20,7 +20,6 @@ const CartItem = ({ item, accessToken, refreshToken }) => {
   const dispatch = useDispatch()
 
   const itemInFavorites = useSelector(selectItemInFavorites(style_id))
-  console.log(itemInFavorites);
 
   const handleDeleteFromCart = () => {
     dispatch(deleteFromCartAsync(accessToken, '/api/cartitems', item, refreshToken))

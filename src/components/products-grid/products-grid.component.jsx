@@ -168,7 +168,7 @@ const ProductsGrid = () => {
         </AnimatePresence>
         <div className="flex flex-col w-full">
           <section
-            className={'grid grid-cols-2 auto-cols-max lg:grid-cols-3 gap-2 justify-between grow'}
+            className={'grid grid-cols-2 auto-cols-max lg:grid-cols-3 gap-2 justify-between grow lg:gap-10 md:mx-5'}
           >
             {
               products.length > 0
