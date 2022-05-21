@@ -16,7 +16,7 @@ cors = CORS()
 
 def create_app(config_type='development'):
     """Function for creating app object
-    
+
     Parameters
     ----------
     config_type : server configuration type
@@ -32,8 +32,11 @@ def create_app(config_type='development'):
 
     from backend.resources import api
     api.init_app(app)
-    
+
     from backend.auth import auth as bp
     app.register_blueprint(bp)
+
+    from backend.checkout import checkout
+    app.register_blueprint(checkout)
 
     return app

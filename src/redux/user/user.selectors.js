@@ -31,3 +31,8 @@ export const selectUserLoading = createSelector(
   [selectUser],
   user => user.fetching_auth_token
 )
+
+export const selectUserId = createSelector(
+  [selectUser],
+  user => user.id
+)

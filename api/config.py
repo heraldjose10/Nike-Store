@@ -15,6 +15,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'nike.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CORS_HEADERS = 'Content-Type'
+    WEBSITE_NAME = 'WEBSTAGING'
 
 
 class TestingConfig(Config):
@@ -30,6 +31,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     """Production configurations for Flask application"""
     DEBUG = False
+    WEBSITE_NAME = 'DEFAULT'
 
 
 configs = {

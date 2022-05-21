@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Fragment, useLayoutEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
 
 import {
   selectCartError,
@@ -8,7 +10,7 @@ import {
   selectCartTotal,
   selectTotalCartItems
 } from "../../redux/cart/cart.selectors"
-import { selectAccessToken, selectRefreshToken } from "../../redux/user/user.selectors"
+import { selectAccessToken, selectRefreshToken, selectUserId } from "../../redux/user/user.selectors"
 import { getCartStartAsync, emptyCart } from "../../redux/cart/cart.actions"
 
 import CartItem from "../../components/cart-item/cart-item.component"
@@ -18,6 +20,7 @@ import Loader from "../../components/loader.component.jsx/loader.component"
 const Cart = () => {
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const totalCartItems = useSelector(selectTotalCartItems)
   const cartItems = useSelector(selectCartItems)
@@ -26,12 +29,35 @@ const Cart = () => {
   const refreshToken = useSelector(selectRefreshToken)
   const cartIsLoading = useSelector(selectCartIsLoading)
   const cartError = useSelector(selectCartError)
+  const userId = useSelector(selectUserId)
 
   useLayoutEffect(() => {
     dispatch(emptyCart())
     dispatch(getCartStartAsync(accessToken, refreshToken, '/api/cartitems'))
   }, [refreshToken, accessToken, dispatch])
 
+
+  const checkout = async () => {
+    const response = await axios({
+      method: 'post',
+      url: '/checkout',
+      data: {
+        amount: cartTotal + 200,
+        cust_id: userId
+      }
+    })
+    if (response.data.message === 'success') {
+      navigate('/checkout', {
+        state: {
+          txnToken: response.data.txnToken,
+          orderId: response.data.order_id
+        }
+      })
+    }
+    else {
+      console.log('nop');
+    }
+  }
 
   return (
     <div className="flex flex-col items-center mb-10 lg:flex-row lg:items-start w-full max-w-[1100px] mx-auto">
@@ -91,7 +117,11 @@ const Cart = () => {
           <p>Total</p>
           <p className="font-bold tracking-wide">{`₹${cartTotal ? cartTotal + 200 : 0}`}</p>
         </span>
-        <CustomButton buttonText='Checkout' padding_y={5} />
+        <CustomButton
+          buttonText='Checkout'
+          padding_y={5}
+          buttonAction={checkout}
+        />
       </div>
     </div>
   )
