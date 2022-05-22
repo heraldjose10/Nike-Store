@@ -5,7 +5,6 @@ from backend.checkout import checkout as _checkout
 from flask import request, current_app, render_template
 import os
 import datetime
-# import Check
 
 # import checksum generation utility
 # You can get this utility from https://developer.paytm.com/docs/checksum/
@@ -14,6 +13,7 @@ import paytmchecksum
 
 @_checkout.post('/checkout')
 def checkout():
+    """route to initiate payment with paytm payment gateway"""
     data = request.json
     order_id = "ORDERID_" + \
         str(datetime.datetime.now().strftime('%m%d%Y_%H%M%S'))
@@ -34,6 +34,7 @@ def checkout():
             "custId": "CUST_" + str(data['cust_id']),
         },
     }
+    # generate a checksum
     checksum = paytmchecksum.generateSignature(json.dumps(
         paytmParams["body"]), os.environ.get('PAYTM_MERCHENT_KEY'))
 
@@ -71,7 +72,7 @@ def checkout():
 
 @_checkout.post('/txnresult')
 def callback():
-
+    """route that handle callback request from paytm payment api"""
     received_data = request.form
 
     paytmParams = {}
@@ -82,19 +83,26 @@ def callback():
             paytmParams[key] = value
     pprint(paytmParams)
     # Verify checksum
-    # Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys
     isValidChecksum = paytmchecksum.verifySignature(
         paytmParams,
         os.environ.get('PAYTM_MERCHENT_KEY'),
         paytmChecksum
     )
     if isValidChecksum:
-        print("Checksum Matched")
         txnId = received_data['TXNID']
+        orderId = received_data['ORDERID']
         if received_data['STATUS'] == 'TXN_SUCCESS':
-            return render_template('redirect.html', redirect='http://localhost:3000/txnresult?status=success&'+'txnId='+txnId)
+            return render_template(
+                'redirect.html',
+                redirect=f'http://localhost:3000/txnresult?status=success&txnId={txnId}&orderId={orderId}'
+            )
         else:
-            return render_template('redirect.html', redirect='http://localhost:3000/txnresult?status=failure&'+'txnId='+txnId)
-
+            return render_template(
+                'redirect.html',
+                redirect=f'http://localhost:3000/txnresult?status=failure&txnId={txnId}'
+            )
     else:
-        print("Checksum Mismatched")
+        return render_template(
+            'redirect.html',
+            redirect=f'http://localhost:3000/txnresult?status=error'
+        )

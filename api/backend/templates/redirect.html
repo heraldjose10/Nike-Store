@@ -2,16 +2,19 @@
 <head>
     <script>
         const fun = () => {
-            // console.log();
+            console.log('{{ redirect }}');
             var url = '{{ redirect }}'
             window.location = url
         }
     </script>
 </head>
 
-<body onload="fun()">
-    <h1>redirecting you to nike store</h1>
-    <h2>{{ redirect }}</h2>
+<body 
+    onload="fun()" 
+    style="display: flex; flex-direction: column; justify-content: center; height: 90vh; font-size: 50px;"
+>
+    <p style="text-align: center;">Redirecting you to nike store.</p>
+    <p style="text-align: center;">Do not reload this page.</p>
 </body>
 
 </html>

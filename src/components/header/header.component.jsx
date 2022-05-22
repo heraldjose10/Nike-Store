@@ -49,7 +49,7 @@ const NavBar = () => {
       <Link to={'/'}>
         <NikeIcon className="h-16 w-16 my-0 mx-4 hover:cursor-pointer" />
       </Link>
-      <div className="flex items-center gap-5 mx-6 ">
+      <div className="flex items-center gap-5 mr-6">
         <div className="hidden font-sans mr-5 md:block">
           <ul className="flex flex-1">
             <Link to={'/shop?gender=men'}>

@@ -19,8 +19,7 @@ import Shop from "./pages/shop/shop.component";
 import Register from "./pages/register/register.component";
 import Cart from "./pages/cart/cart.component";
 import Profile from "./pages/profile/profile.component";
-import Checkout from "./pages/checkout/checkout.component";
-import TxnResult from "./pages/TxnResult/TxnResult.component";
+import TxnResult from "./pages/txn-result/txn-result.component";
 
 const App = () => {
 
@@ -54,7 +53,6 @@ const App = () => {
           <Route path='/register' element={<Register />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/profile' element={<Profile />} />
-          <Route path='/checkout' element={<Checkout />} />
           <Route path='/txnresult' element={<TxnResult />} />
         </Routes>
         <Footer />

@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { Fragment, useLayoutEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { Fragment, useLayoutEffect, useState, useEffect } from "react"
 import axios from "axios"
 
 import {
@@ -20,7 +19,11 @@ import Loader from "../../components/loader.component.jsx/loader.component"
 const Cart = () => {
 
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const [checkout, setCheckout] = useState({
+    txn: { txnToken: null, orderId: null },
+    txnIsLoading: false,
+    txnError: null
+  })
 
   const totalCartItems = useSelector(selectTotalCartItems)
   const cartItems = useSelector(selectCartItems)
@@ -37,27 +40,96 @@ const Cart = () => {
   }, [refreshToken, accessToken, dispatch])
 
 
-  const checkout = async () => {
-    const response = await axios({
-      method: 'post',
-      url: '/checkout',
-      data: {
-        amount: cartTotal + 200,
-        cust_id: userId
+  const handleCheckout = async () => {
+    if(!cartTotal || cartError) return
+
+    setCheckout(prevState => {
+      return {
+        ...prevState,
+        txnIsLoading: true,
+        txnError: null
       }
     })
-    if (response.data.message === 'success') {
-      navigate('/checkout', {
-        state: {
-          txnToken: response.data.txnToken,
-          orderId: response.data.order_id
+    try {
+      const response = await axios({
+        method: 'post',
+        url: '/checkout',
+        data: {
+          amount: cartTotal + 200,
+          cust_id: userId
         }
       })
-    }
-    else {
-      console.log('nop');
+      if (response.data.message === 'success') {
+        setCheckout({
+          txn: { txnToken: response.data.txnToken, orderId: response.data.order_id },
+          txnIsLoading: false,
+          txnError: null
+        })
+      }
+      else {
+        setCheckout({
+          txn: { txnToken: null, orderId: null },
+          txnIsLoading: false,
+          txnError: 'Server could not process your order. Please try again later.'
+        })
+      }
+    } catch (error) {
+      setCheckout({
+        txn: { txnToken: null, orderId: null },
+        txnIsLoading: false,
+        txnError: error
+      })
     }
   }
+
+  useEffect(() => {
+
+    if (!checkout.txn.txnToken || !checkout.txn.orderId) return
+
+    const mid = process.env.REACT_APP_PAYTM_MID
+
+    const onScriptLoad = () => {
+      var config = {
+        root: "",
+        flow: "DEFAULT",
+        data: {
+          orderId: checkout.txn.orderId, /* update order id */
+          token: checkout.txn.txnToken, /* update token value */
+          tokenType: "TXN_TOKEN",
+          amount: "10.00" /* update amount */
+        },
+        handler: {
+          notifyMerchant: function (eventName, data) {
+            console.log("notifyMerchant handler function called");
+            console.log("eventName => ", eventName);
+            console.log("data => ", data);
+          }
+        }
+      };
+
+      if (window.Paytm && window.Paytm.CheckoutJS) {
+        window.Paytm.CheckoutJS.onLoad(function excecuteAfterCompleteLoad() {
+          // initialze configuration using init method 
+          window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+            // after successfully updating configuration, invoke JS Checkout
+            window.Paytm.CheckoutJS.invoke();
+          }).catch(function onError(error) {
+            console.log("error => ", error);
+          });
+        });
+      }
+    }
+
+    const script = document.createElement('script');
+    script.src = `https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/${mid}.js`;
+    script.async = true;
+    script.onload = onScriptLoad
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    }
+  }, [checkout.txn.txnToken, checkout.txn.orderId])
 
   return (
     <div className="flex flex-col items-center mb-10 lg:flex-row lg:items-start w-full max-w-[1100px] mx-auto">
@@ -118,9 +190,9 @@ const Cart = () => {
           <p className="font-bold tracking-wide">{`₹${cartTotal ? cartTotal + 200 : 0}`}</p>
         </span>
         <CustomButton
-          buttonText='Checkout'
+          buttonText={checkout.txnIsLoading ? 'PROCESSING...' : 'Checkout'}
           padding_y={5}
-          buttonAction={checkout}
+          buttonAction={handleCheckout}
         />
       </div>
     </div>
