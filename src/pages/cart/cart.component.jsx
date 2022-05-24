@@ -53,7 +53,7 @@ const Cart = () => {
     try {
       const response = await axios({
         method: 'post',
-        url: '/checkout',
+        url: 'api/checkout',
         data: {
           amount: cartTotal + 200,
           cust_id: userId
