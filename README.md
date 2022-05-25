@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+# Nike Clone
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div>
+  <img src='readme/icons/flask.svg' style="width:50px;height:50px"/>
+  <img src='readme/icons/framer.svg' style="width:50px;height:50px">
+  <img src='readme/icons/jwt-icon.svg' style="width:50px;height:50px">
+  <img src='readme/icons/react.svg' style="width:50px;height:50px">
+  <img src='readme/icons/redux.svg' style="width:50px;height:50px">
+  <img src='readme/icons/tailwindcss-icon.svg' style="width:50px;height:50px">
+<div/>
 
-## Available Scripts
 
-In the project directory, you can run:
+## Live Demo
 
-### `npm start`
+- Go to https://nike-online.ddns.net/ for live demo.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## How to run this on localhost?
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This project was bootstrapped with [CRA](https://reactjs.org/docs/create-a-new-react-app.html). Follow these steps to clone and run this project in your local machine:
 
-### `npm test`
+- run `yarn install`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- run `yarn start` to start react server
 
-### `npm run build`
+- run `yarn start-api` to start [Flask server](https://flask.palletsprojects.com/en/2.1.x/)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Dont forget to add following environment variables in a .env file in root folder:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- `REACT_APP_PAYTM_MID` : Merchent ID from [PayTM](https://business.paytm.com/payment-gateway)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Add the following environment variables in .env file inside api folder:
 
-### `npm run eject`
+- `SECRET_KEY` : secret key for flask app
+- `JWT_SECRET_KEY` : secret key for [JWT module](https://flask-jwt-extended.readthedocs.io/en/stable/options/#JWT_SECRET_KEY)
+- `PAYTM_MID` : Merchent ID from PayTM
+- `PAYTM_MERCHENT_KEY` : Merchent ket from PayTM 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Run `yarn build` to create a production build.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Features
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- User Authentication using JWT. Auth using refresh token.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Product data scraped from [Nike India Sale](https://www.nike.com/in/w/sale-3yaep) page.
 
-## Learn More
+- PayTM payments gateway.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Product filters by gender and product category
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Option to add products to favorites.
 
-### Code Splitting
+## Screenshots
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<div>
+  <img src='readme/screenshots/favorites_page.png' style='height:300px;width:200px;'/>
+  <img src='readme/screenshots/orders_page.png' style='height:300px;width:300px;'>
+  <img src='readme/screenshots/paytm_payment_gateawy_page.png' style='height:300px;width:400px;'>
+<div/>
