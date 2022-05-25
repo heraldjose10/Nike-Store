@@ -25,7 +25,7 @@ def checkout():
         "mid": mid,
         "websiteName": current_app.config['WEBSITE_NAME'],
         "orderId": order_id,
-        "callbackUrl": "http://65.0.231.102:3000/api/txnresult",
+        "callbackUrl": "https://nike-online.ddns.net/api/txnresult",
         "txnAmount": {
             "value": str(format(float(data['amount']), '.2f')),
             "currency": "INR",
@@ -94,15 +94,15 @@ def callback():
         if received_data['STATUS'] == 'TXN_SUCCESS':
             return render_template(
                 'redirect.html',
-                redirect=f'http://65.0.231.102:3000/txnresult?status=success&txnId={txnId}&orderId={orderId}'
+                redirect=f'https://nike-online.ddns.net/txnresult?status=success&txnId={txnId}&orderId={orderId}'
             )
         else:
             return render_template(
                 'redirect.html',
-                redirect=f'http://65.0.231.102:3000/txnresult?status=failure&txnId={txnId}'
+                redirect=f'https://nike-online.ddns.net/txnresult?status=failure&txnId={txnId}'
             )
     else:
         return render_template(
             'redirect.html',
-            redirect=f'http://65.0.231.102:3000/txnresult?status=error'
+            redirect=f'https://nike-online.ddns.net/txnresult?status=error'
         )
