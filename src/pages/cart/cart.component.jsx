@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Fragment, useLayoutEffect, useState, useEffect } from "react"
 import axios from "axios"
+import { Helmet } from "react-helmet"
 
 import {
   selectCartError,
@@ -41,7 +42,7 @@ const Cart = () => {
 
 
   const handleCheckout = async () => {
-    if(!cartTotal || cartError) return
+    if (!cartTotal || cartError) return
 
     setCheckout(prevState => {
       return {
@@ -132,70 +133,75 @@ const Cart = () => {
   }, [checkout.txn.txnToken, checkout.txn.orderId])
 
   return (
-    <div className="flex flex-col items-center mb-10 lg:flex-row lg:items-start w-full max-w-[1100px] mx-auto">
-      <div className="my-10 flex flex-col items-center lg:hidden">
-        <h1 className="text-2xl font-semibold">Bag</h1>
-        <span className="flex gap-4" >
-          <p className="text-gray-500">{`${totalCartItems} items |`}</p>
-          <p>{`₹ ${cartTotal}`}</p>
-        </span>
-      </div>
-      <div className="w-full flex flex-col items-center lg:basis-2/3">
-        <div className="w-[90%] border-t border-[#e5e5e5] h-[1px] lg:hidden"></div>
-        <h1 className="hidden lg:block text-2xl self-start px-4">Bag</h1>
-        {
-          cartIsLoading
-            ? <Loader />
-            : (
-              cartItems.map((item, index) => (
-                <Fragment key={index}>
-                  <CartItem
-                    item={{ ...item }}
-                    accessToken={accessToken}
-                    refreshToken={refreshToken}
-                  />
-                  <div className="w-[90%] border-t border-[#e5e5e5] h-[1px]"></div>
-                </Fragment>
-              ))
-            )
-        }
+    <Fragment>
+      <Helmet>
+        <title>Nike Cart</title>
+      </Helmet>
+      <div className="flex flex-col items-center mb-10 lg:flex-row lg:items-start w-full max-w-[1100px] mx-auto">
+        <div className="my-10 flex flex-col items-center lg:hidden">
+          <h1 className="text-2xl font-semibold">Bag</h1>
+          <span className="flex gap-4" >
+            <p className="text-gray-500">{`${totalCartItems} items |`}</p>
+            <p>{`₹ ${cartTotal}`}</p>
+          </span>
+        </div>
+        <div className="w-full flex flex-col items-center lg:basis-2/3">
+          <div className="w-[90%] border-t border-[#e5e5e5] h-[1px] lg:hidden"></div>
+          <h1 className="hidden lg:block text-2xl self-start px-4">Bag</h1>
+          {
+            cartIsLoading
+              ? <Loader />
+              : (
+                cartItems.map((item, index) => (
+                  <Fragment key={index}>
+                    <CartItem
+                      item={{ ...item }}
+                      accessToken={accessToken}
+                      refreshToken={refreshToken}
+                    />
+                    <div className="w-[90%] border-t border-[#e5e5e5] h-[1px]"></div>
+                  </Fragment>
+                ))
+              )
+          }
 
-        {
-          (!cartTotal && !cartIsLoading && !cartError) && (
-            <p className="w-full px-4 text-center lg:text-left">
-              There are no items in your bag.
-            </p>
-          )
-        }
-        {
-          (cartError) && (
-            <p className="w-full px-4 text-center lg:text-left">
-              There was an error loading cart
-            </p>
-          )
-        }
+          {
+            (!cartTotal && !cartIsLoading && !cartError) && (
+              <p className="w-full px-4 text-center lg:text-left">
+                There are no items in your bag.
+              </p>
+            )
+          }
+          {
+            (cartError) && (
+              <p className="w-full px-4 text-center lg:text-left">
+                There was an error loading cart
+              </p>
+            )
+          }
+        </div>
+        <div className="px-4 flex flex-col w-full lg:basis-1/3">
+          <h2 className="text-2xl py-5 mt-5">Summary</h2>
+          <span className="flex justify-between mb-1">
+            <p>Subtotal</p>
+            <p className="tracking-wide">{`₹${cartTotal}`}</p>
+          </span>
+          <span className="flex justify-between mb-1">
+            <p>Estimated Shipping & Handling</p>
+            <p className="tracking-wide">{`₹${cartTotal && '200'}`}</p>
+          </span>
+          <span className="flex justify-between my-4">
+            <p>Total</p>
+            <p className="font-bold tracking-wide">{`₹${cartTotal ? cartTotal + 200 : 0}`}</p>
+          </span>
+          <CustomButton
+            buttonText={checkout.txnIsLoading ? 'PROCESSING...' : 'Checkout'}
+            padding_y={5}
+            buttonAction={handleCheckout}
+          />
+        </div>
       </div>
-      <div className="px-4 flex flex-col w-full lg:basis-1/3">
-        <h2 className="text-2xl py-5 mt-5">Summary</h2>
-        <span className="flex justify-between mb-1">
-          <p>Subtotal</p>
-          <p className="tracking-wide">{`₹${cartTotal}`}</p>
-        </span>
-        <span className="flex justify-between mb-1">
-          <p>Estimated Shipping & Handling</p>
-          <p className="tracking-wide">{`₹${cartTotal && '200'}`}</p>
-        </span>
-        <span className="flex justify-between my-4">
-          <p>Total</p>
-          <p className="font-bold tracking-wide">{`₹${cartTotal ? cartTotal + 200 : 0}`}</p>
-        </span>
-        <CustomButton
-          buttonText={checkout.txnIsLoading ? 'PROCESSING...' : 'Checkout'}
-          padding_y={5}
-          buttonAction={handleCheckout}
-        />
-      </div>
-    </div>
+    </Fragment>
   )
 }
 

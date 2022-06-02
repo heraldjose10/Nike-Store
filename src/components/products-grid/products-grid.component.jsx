@@ -8,7 +8,8 @@ import {
   setCurrentCategory,
   clearProducts,
   clearCurrentCategory,
-  fetchProductsStartAsync
+  fetchProductsStartAsync,
+  fetchProductsStart
 } from "../../redux/shop/shop.actions";
 import {
   selectNextURL,
@@ -26,9 +27,10 @@ import CategoriesAndFilters from "../categories-scroller/categories-scroller.com
 import Loader from "../loader.component.jsx/loader.component";
 import FiltersModal from "../filters-modal/filters-modal.component";
 import { AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 const ProductsGrid = () => {
-
+  console.log('render')
   const { categoryId } = useParams()
   const search = useQueryParams('search')
   const gender = useQueryParams('gender')
@@ -78,6 +80,11 @@ const ProductsGrid = () => {
     dispatch(fetchProductsStartAsync(url, 20, 1))
     return () => dispatch(clearProducts())
   }, [categoryId, dispatch, search, filter])
+
+  useEffect(() => {
+    dispatch(clearProducts())
+    dispatch(fetchProductsStart())
+  }, [categoryId, search, filter, dispatch])
 
   useEffect(() => {
     const getCategory = async () => {
@@ -136,6 +143,9 @@ const ProductsGrid = () => {
   console.log(productsError);
   return (
     <Fragment>
+      <Helmet>
+        <title>{`Shop Nike ${category ? category.name : ''} `}</title>
+      </Helmet>
       <header className="p-5 text-2xl font-sans font-medium sticky top-0 z-10 bg-white">
         {
           heading
