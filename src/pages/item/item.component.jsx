@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet"
 import { Fragment, useEffect, useLayoutEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
@@ -219,18 +220,23 @@ const Item = () => {
   )
 
   return (
-    <main className="py-3 lg:flex lg:mx-5 max-w-[1440px] self-center">
-      {
-        currentProductIsLoading && !currentProductError
-          ? <Loader />
-          : ProductUI
-      }
-      {
-        !currentProductIsLoading && currentProductError && (
-          <div className="my-10">There was an error loading this product</div>
-        )
-      }
-    </main>
+    <Fragment>
+      <Helmet>
+        <title>{currentProduct ? currentProduct.name : 'Nike Online'}</title>
+      </Helmet>
+      <main className="py-3 lg:flex lg:mx-5 max-w-[1440px] self-center">
+        {
+          currentProductIsLoading && !currentProductError
+            ? <Loader />
+            : ProductUI
+        }
+        {
+          !currentProductIsLoading && currentProductError && (
+            <div className="my-10">There was an error loading this product</div>
+          )
+        }
+      </main>
+    </Fragment>
   )
 }
 

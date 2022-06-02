@@ -7,7 +7,7 @@ export const setProducts = (products) => ({
   payload: products
 })
 
-const fetchProductsStart = () => ({
+export const fetchProductsStart = () => ({
   type: shopActionTypes.FETCH_PRODUCTS_START
 })
 
